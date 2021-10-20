@@ -1,5 +1,3 @@
-
-
 votesim —A Ranked Choice Voting System for Python
 ==========
 [![PyPI version](https://badge.fury.io/py/votesim.svg)](https://badge.fury.io/py/votesim) ![Test status](https://github.com/jontingvold/votesim/workflows/CI/badge.svg?branch=master)  [![Coverage Status](https://coveralls.io/repos/github/jontingvold/votesim/badge.svg?branch=master)](https://coveralls.io/github/jontingvold/votesim?branch=master)
@@ -113,3 +111,4 @@ More examples in [examples.py](./examples.py)
 
 ## License
 [MIT](LICENSE.txt)
+
