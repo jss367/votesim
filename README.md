@@ -2,11 +2,12 @@
 
 [![PyPI version](https://badge.fury.io/py/votesim.svg)](https://badge.fury.io/py/votesim) ![Test status](https://github.com/jontingvold/votesim/workflows/CI/badge.svg?branch=master)  [![Coverage Status](https://coveralls.io/repos/github/jontingvold/votesim/badge.svg?branch=master)](https://coveralls.io/github/jontingvold/votesim?branch=master)
 
-votesim is a python library for election voting. It was forked from [PyRankVote](https://github.com/jontingvold/pyrankvote).
+votesim is a python library for simulating elections. It was forked from [PyRankVote](https://github.com/jontingvold/pyrankvote).
 
 ## Next steps:
 
 The next steps for votesim are to add support for Approval Voting.
+
 
 The following ranking methods are implemented for electing one person/alternative (e.g. electing the chairman to a board):
 
@@ -115,4 +116,3 @@ More examples in [examples.py](./examples.py)
 
 ## License
 [MIT](LICENSE.txt)
->>>>>>> Stashed changes
