@@ -69,12 +69,7 @@ class Ballot:
 
     @staticmethod
     def _is_all_candidate_objects(objects) -> bool:
-        for obj in objects:
-            if not Ballot._is_candidate_object(obj):
-                return False
-
-        # If all objects are Candidate-objects
-        return True
+        return all(Ballot._is_candidate_object(obj) for obj in objects)
 
     @staticmethod
     def _is_candidate_object(obj) -> bool:
