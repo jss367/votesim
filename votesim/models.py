@@ -53,7 +53,7 @@ class Ballot:
 
     def __repr__(self) -> str:
         candidate_name = ", ".join([candidate.name for candidate in self.ranked_candidates])
-        return "<Ballot(%s)>" % candidate_name
+        return f"Ranked ballot: {candidate_name}"
 
     @staticmethod
     def _is_duplicates(ranked_candidates) -> bool:
