@@ -16,7 +16,7 @@ class Candidate:
         return self.name
 
     def __repr__(self) -> str:
-        return "<Candidate('%s')>" % self.name
+        return self.name
 
     def __hash__(self):
         return hash(self.name)
@@ -32,6 +32,11 @@ class DuplicateCandidatesError(RuntimeError):
     pass
 
 
+class ApprovalBallot:
+    def __init__(self, candidates: List) -> None:
+        self.candidates: List[Candidate] = tuple
+
+
 class Ballot:
     """
     A ballot (vote) where the voter has ranked all, or just some, of the candidates.
@@ -40,6 +45,9 @@ class Ballot:
     """
 
     def __init__(self, ranked_candidates: List[Candidate]):
+        """
+        TODO: Why does this need to be a tuple?
+        """
         self.ranked_candidates: List[Candidate] = tuple(ranked_candidates)
 
         if Ballot._is_duplicates(ranked_candidates):
@@ -61,12 +69,7 @@ class Ballot:
 
     @staticmethod
     def _is_all_candidate_objects(objects) -> bool:
-        for obj in objects:
-            if not Ballot._is_candidate_object(obj):
-                return False
-
-        # If all objects are Candidate-objects
-        return True
+        return all(Ballot._is_candidate_object(obj) for obj in objects)
 
     @staticmethod
     def _is_candidate_object(obj) -> bool:

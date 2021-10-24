@@ -38,8 +38,7 @@ class RoundResult:
         self.number_of_blank_votes = number_of_blank_votes
 
     def __repr__(self):
-        representation_string = "<RoundResult>"
-        return representation_string
+        return "RoundResult: "
 
     def __str__(self):
         if almost_equal(self.number_of_blank_votes, 0.0):
