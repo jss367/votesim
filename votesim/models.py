@@ -32,11 +32,6 @@ class DuplicateCandidatesError(RuntimeError):
     pass
 
 
-class ApprovalBallot:
-    def __init__(self, candidates: List) -> None:
-        self.candidates: List[Candidate] = tuple
-
-
 class Ballot:
     """
     A ballot (vote) where the voter has ranked all, or just some, of the candidates.

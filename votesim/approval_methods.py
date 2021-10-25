@@ -6,6 +6,10 @@ class ApprovalBallot:
     def __init__(self, candidates: List) -> None:
         self.candidates: List[Candidate] = candidates
 
+    def __repr__(self) -> str:
+        candidate_name = ", ".join([candidate.name for candidate in self.candidates])
+        return f"Approval ballot: {candidate_name}"
+
 
 class ApprovalElection:
     """
@@ -37,6 +41,6 @@ class ApprovalElection:
         #         winners = max(results.items(), key=lambda x: x[1])
         winners = [k for (k, v) in results.items() if v == max(results.values())]
         if len(winners) == 1:
-            print(f"Winner: {winners}")
+            print(f"Winner: {winners[0]}")
         else:
             print(f"Multiple Winners: {winners}")
