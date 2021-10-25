@@ -17,6 +17,11 @@ def almost_equal(value1: float, value2: float) -> bool:
     return abs(value1 - value2) < CONSIDERED_EQUAL_MARGIN
 
 
+def print_ballots(ballots):
+    for ballot in ballots:
+        print(ballot)
+
+
 class CandidateStatus:
     Elected = "Elected"
     Active = "Active"
