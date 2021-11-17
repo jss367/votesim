@@ -95,7 +95,7 @@ class NoCandidatesLeftInRaceError(RuntimeError):
 
 class ElectionManager:
     """
-    ElectionManager is a abstract class that take care of managing the counting of votes.
+    ElectionManager is a class that takes care of managing the counting of votes.
     It implements common functionality among the ranking methods.
 
     ElectionManager is initialized by giving it the list of candidates and ballots,
@@ -120,7 +120,6 @@ class ElectionManager:
         ballots: List[Ballot],
         number_of_votes_pr_voter=1,
         compare_method_if_equal=CompareMethodIfEqual.MostSecondChoiceVotes,
-        pick_random_if_blank=False,
     ):
 
         self._ballots = ballots
@@ -137,7 +136,6 @@ class ElectionManager:
         self._number_of_candidates = len(candidates)
         self._number_of_votes_pr_voter = number_of_votes_pr_voter
         self._compare_method_if_equal = compare_method_if_equal
-        self._pick_random_if_blank = pick_random_if_blank
 
         # Distribute votes to the most preferred candidates (before any candidates are elected or rejected)
         for ballot in ballots:
@@ -147,14 +145,8 @@ class ElectionManager:
 
             number_of_blank_votes = number_of_votes_pr_voter - len(ballot.ranked_candidates)
             if number_of_blank_votes > 0:
-                if self._pick_random_if_blank:
-                    candidates_that_should_be_voted_on = list(candidates_that_should_be_voted_on)
-                    for _ in range(number_of_blank_votes):
-                        new_candidate_choice = random.choice(candidates)
-                        candidates_that_should_be_voted_on.append(new_candidate_choice)
-                else:
-                    self._exhausted_ballots.append(ballot)
-                    self._number_of_blank_votes += number_of_blank_votes
+                self._exhausted_ballots.append(ballot)
+                self._number_of_blank_votes += number_of_blank_votes
 
             for candidate in candidates_that_should_be_voted_on:
                 candidate_vc = self._candidate_vote_counts[candidate]
@@ -218,12 +210,6 @@ class ElectionManager:
                 ballot, self._number_of_votes_pr_voter - 1
             )
             # Is none if blank or exhausted ballot
-
-            if new_candidate_choice is None and self._pick_random_if_blank:
-                # Chose a candidate at random
-                candidates_in_race = self.get_candidates_in_race()
-                if len(candidates_in_race) > 0:
-                    new_candidate_choice = random.choice(candidates_in_race)
 
             if new_candidate_choice:
                 new_candidate_cv = self._candidate_vote_counts[new_candidate_choice]

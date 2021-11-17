@@ -10,4 +10,3 @@ def head_to_head(ballots, cand_a, cand_b):
                 prefer_b += 1
                 break
     print(f"Head-to-head Election Results:\n{cand_a}: {prefer_a}\n{cand_b}: {prefer_b}")
-    return prefer_a, prefer_b

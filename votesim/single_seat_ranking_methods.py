@@ -14,7 +14,6 @@ def instant_runoff_voting(
     candidates: List[Candidate],
     ballots: List[Ballot],
     compare_method_if_equal=CompareMethodIfEqual.MostSecondChoiceVotes,
-    pick_random_if_blank=False,
 ) -> ElectionResults:
     """
     Instant runoff voting (IRV), often known as the alternative vote, is a singe candidate election method,
@@ -29,8 +28,6 @@ def instant_runoff_voting(
     one vote (no ranking) and where the worst candidate is removed, until there are as many candidates left as positions
     that should be filled. This is the prefered method in Robers rules of order. The only between difference between
     IRV/PBV and exhaustive ballout, is that in exhaustive ballout voters can adjust votes according to partial results.
-
-    For more info see Wikipedia.
     """
 
     return multiple_seat_ranking_methods.preferential_block_voting(
@@ -38,5 +35,4 @@ def instant_runoff_voting(
         ballots,
         number_of_seats=1,
         compare_method_if_equal=compare_method_if_equal,
-        pick_random_if_blank=pick_random_if_blank,
     )

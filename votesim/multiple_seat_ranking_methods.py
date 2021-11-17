@@ -17,7 +17,6 @@ def preferential_block_voting(
     ballots: List[Ballot],
     number_of_seats: int,
     compare_method_if_equal=CompareMethodIfEqual.MostSecondChoiceVotes,
-    pick_random_if_blank=False,
 ) -> ElectionResults:
     """
     Preferential block voting (PBV) is a multiple candidate election method, that elected the candidate that can
@@ -32,8 +31,6 @@ def preferential_block_voting(
     where the worst candidate is removed, until there are as many candidates left as positions that should be filled.
     This is the prefered method in Robers rules of order. The only between difference between IRV/PBV and exhaustive ballout,
     is that in exhaustive ballout voters can adjust votes according to partial results.
-
-    For more info see Wikipedia.
     """
 
     rounding_error = 1e-6
@@ -43,7 +40,6 @@ def preferential_block_voting(
         ballots,
         number_of_votes_pr_voter=number_of_seats,
         compare_method_if_equal=compare_method_if_equal,
-        pick_random_if_blank=pick_random_if_blank,
     )
     election_results = ElectionResults()
 
@@ -77,7 +73,7 @@ def preferential_block_voting(
 
             elif is_last_candidate:
                 # Should be catched by if statement above
-                raise RuntimeError("Illigal state")
+                raise RuntimeError("Illegal state")
 
             last_votes = votes_for_candidate
             votes_remaining -= votes_for_candidate
@@ -127,7 +123,6 @@ def single_transferable_vote(
     ballots: List[Ballot],
     number_of_seats: int,
     compare_method_if_equal=CompareMethodIfEqual.MostSecondChoiceVotes,
-    pick_random_if_blank=False,
 ) -> ElectionResults:
     """
     Single transferable vote (STV) is a multiple candidate election method, that elected the candidate that can
@@ -143,8 +138,6 @@ def single_transferable_vote(
     If one candidate get more votes than the threshold the excess votes are transfered to voters that voted for this
     candidate's 2nd (or 3rd, 4th etc) alternative. If no candidate get over the threshold, the candidate with fewest votes
     are removed. Votes for this candidate is then transfered to voters 2nd (or 3rd, 4th etc) alternative.
-
-    For more info see Wikipedia.
     """
 
     rounding_error = 1e-6
@@ -154,7 +147,6 @@ def single_transferable_vote(
         ballots,
         number_of_votes_pr_voter=1,
         compare_method_if_equal=compare_method_if_equal,
-        pick_random_if_blank=pick_random_if_blank,
     )
     election_results = ElectionResults()
 

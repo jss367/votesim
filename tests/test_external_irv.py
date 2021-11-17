@@ -59,17 +59,8 @@ class TestExternalIRV(unittest.TestCase):
         Data source: https://s3.amazonaws.com/ranked.vote-reports/us/vt/btv/2009/03/mayor/us_vt_btv_2009_03_mayor.normalized.csv.gz
         """
 
-        file_name = "us_vt_btv_2009_03_mayor.normalized.csv"
-        candidates, ballots = parse_ballots_csv_file(file_name)
+        number_of_votes = self._extracted_from_test_us_me_2018_11_cd02_4("us_vt_btv_2009_03_mayor.normalized.csv", 607)
 
-        election_result = votesim.instant_runoff_voting(candidates, ballots, pick_random_if_blank=False)
-        last_round = election_result.rounds[-1]
-
-        blank_votes = last_round.number_of_blank_votes
-        correct_blank_votes = 607
-        self.assertEqual(correct_blank_votes, blank_votes)
-
-        number_of_votes = [candidate_result.number_of_votes for candidate_result in last_round.candidate_results]
         correct_number_of_votes = [4313, 4060, 0, 0, 0, 0]
         assert_list_almost_equal(self, correct_number_of_votes, number_of_votes)
 
@@ -80,19 +71,7 @@ class TestExternalIRV(unittest.TestCase):
         Data source: https://s3.amazonaws.com/ranked.vote-reports/us/me/2018/06/cd02-primary/us_me_2018_06_cd02-primary.normalized.csv.gz
         """
 
-        file_name = "us_me_2018_06_cd02-primary.normalized.csv"
-        candidates, ballots = parse_ballots_csv_file(file_name)
-
-        election_result = votesim.instant_runoff_voting(candidates, ballots, pick_random_if_blank=False)
-        last_round = election_result.rounds[-1]
-
-        blank_votes = last_round.number_of_blank_votes
-        correct_blank_votes = 7381
-        self.assertEqual(correct_blank_votes, blank_votes)
-
-        number_of_votes = [candidate_result.number_of_votes for candidate_result in last_round.candidate_results]
-        correct_number_of_votes = [23611, 19853, 0, 0]
-        assert_list_almost_equal(self, correct_number_of_votes, number_of_votes)
+        self._extracted_from_test_us_me_2018_11_cd02_4_("us_me_2018_06_cd02-primary.normalized.csv", 7381, 23611, 19853)
 
     def test_us_me_2018_11_cd02(self):
         """
@@ -101,16 +80,23 @@ class TestExternalIRV(unittest.TestCase):
         Data source: https://s3.amazonaws.com/ranked.vote-reports/us/me/2018/11/cd02/us_me_2018_11_cd02.normalized.csv.gz
         """
 
-        file_name = "us_me_2018_11_cd02.normalized.csv"
-        candidates, ballots = parse_ballots_csv_file(file_name)
+        self._extracted_from_test_us_me_2018_11_cd02_4_("us_me_2018_11_cd02.normalized.csv", 14706, 142440, 138931)
 
-        election_result = votesim.instant_runoff_voting(candidates, ballots, pick_random_if_blank=False)
-        last_round = election_result.rounds[-1]
-
-        blank_votes = last_round.number_of_blank_votes
-        correct_blank_votes = 14706
-        self.assertEqual(correct_blank_votes, blank_votes)
-
-        number_of_votes = [candidate_result.number_of_votes for candidate_result in last_round.candidate_results]
-        correct_number_of_votes = [142440, 138931, 0, 0]
+    # TODO Rename this here and in `test_us_vt_btv_2009_03_mayor`, `test_us_me_2018_06_cd02_primary` and `test_us_me_2018_11_cd02`
+    def _extracted_from_test_us_me_2018_11_cd02_4_(self, arg0, arg1, arg2, arg3):
+        number_of_votes = self._extracted_from_test_us_me_2018_11_cd02_4(arg0, arg1)
+        correct_number_of_votes = [arg2, arg3, 0, 0]
         assert_list_almost_equal(self, correct_number_of_votes, number_of_votes)
+
+    # TODO Rename this here and in `test_us_vt_btv_2009_03_mayor`, `test_us_me_2018_06_cd02_primary` and `test_us_me_2018_11_cd02`
+    def _extracted_from_test_us_me_2018_11_cd02_4(self, arg0, arg1):
+        file_name = arg0
+        candidates, ballots = parse_ballots_csv_file(file_name)
+        election_result = votesim.instant_runoff_voting(candidates, ballots)
+        last_round = election_result.rounds[-1]
+        blank_votes = last_round.number_of_blank_votes
+        correct_blank_votes = arg1
+        self.assertEqual(correct_blank_votes, blank_votes)
+        result = [candidate_result.number_of_votes for candidate_result in last_round.candidate_results]
+
+        return result

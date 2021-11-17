@@ -1,0 +1,1219 @@
+THE RANK-ORDER VOTES IN THE 2009 BURLINGTON MAYORAL ELECTION
+-------By Juho Laatu & Warren D. Smith-----March 2009-------
+
+Juho Laatu independently produced a summary of all 8980 valid votes
+(i.e. excluding the 4 invalid ones). He wrote software that input official ballot 
+files, and employed these abbreviations:
+
+K = Bob Kiss
+M = Andy Montroll
+N = James Simpson
+H = Dan Smith
+W = Kurt Wright
+R = Write-in
+
+The line "83: H>M>K" means 83 voters ranked Smith top, Montroll 2nd, Kiss 3rd, 
+and the others implicitly co-equal last.
+
+---the votes---
+840: W
+355: K>M
+326: K
+271: W>H
+256: W>M
+234: K>M>H
+200: M>K
+178: M
+147: W>M>H
+145: M>K>H
+139: M>H
+125: K>H
+124: H
+123: K>M>H>W>N
+122: W>H>M
+121: K>H>M
+120: K>M>H>N>W
+104: W>M>H>N>K
+103: K>M>N>H>W
+102: W>M>H>K>N
+101: W>H>M>K>N
+94: M>W
+93: H>W
+93: M>H>K
+90: H>M
+90: W>H>M>N>K
+88: H>K>M
+83: H>M>K
+80: K>H>M>N>W
+80: W>K
+76: W>H>N>M>K
+72: M>K>H>W>N
+71: K>M>W>H>N
+69: M>H>K>W>N
+69: W>M>K>H>N
+66: K>W
+62: M>H>W
+61: M>K>H>N>W
+60: K>M>H>W
+60: M>W>H>K>N
+58: H>K>M>N>W
+57: M>W>H
+56: M>W>K>H>N
+55: K>H>M>W>N
+54: W>M>H>K
+53: M>H>K>N>W
+52: H>W>M>K>N
+52: K>M>N
+52: M>H>W>K>N
+52: W>H>K>M>N
+51: H>K
+50: H>W>M
+50: M>K>W>H>N
+50: W>K>M>H>N
+48: K>M>W
+46: M>K>W
+46: W>M>K
+45: W>H>M>K
+45: W>K>H>M>N
+43: H>M>K>W>N
+42: K>M>H>N
+41: K>M>N>H
+41: M>H>K>W
+39: K>W>M>H>N
+39: M>W>H>N>K
+38: H>M>K>N>W
+38: M>K>H>W
+37: H>M>W
+37: M>W>H>K
+34: M>W>K
+32: H>K>M>W>N
+32: M>H>W>K
+31: H>M>W>K>N
+31: K>W>M
+30: W>H>K
+29: K>H>M>W
+28: H>W>M>N>K
+27: H>K>M>W
+27: H>M>W>K
+27: H>W>K>M>N
+27: M>H>N>K>W
+27: M>K>N>H>W
+26: H>M>K>W
+26: K>H>W>M>N
+25: W>N
+24: K>M>W>H
+24: K>N>M>H>W
+24: M>K>W>H
+24: W>K>M
+23: K>H>N>M>W
+23: M>H>W>N>K
+22: M>K>H>N
+21: K>H>M>N
+21: K>W>H>M>N
+21: W>K>H
+21: W>K>M>N>H
+20: M>W>K>H
+19: K>N
+19: W>H>K>M
+19: W>M>N>H>K
+18: H>M>N>K>W
+17: H>W>M>K
+17: W>H>K>N>M
+16: H>K>W>M>N
+16: H>W>K
+16: K>N>M
+16: W>H>N
+15: H>M>N>W>K
+15: K>H>N
+15: K>H>W>M
+15: K>W>H>M
+15: W>H>N>K>M
+15: W>K>M>H
+15: W>M>K>H
+14: H>K>N>M>W
+14: K>M>W>N>H
+13: H>K>M>N
+13: H>M>W>N>K
+13: K>H>W
+13: K>M>N>W>H
+13: M>H>K>N
+12: H>W>K>M
+12: H>W>N>M>K
+12: K>N>H>M>W
+12: K>W>H
+12: K>W>M>H
+12: K>W>M>N>H
+12: M>K>N
+12: M>W>N>H>K
+12: W>K>H>N>M
+11: H>K>W
+11: M>H>N>W>K
+11: M>K>N>H
+11: M>K>W>N>H
+11: W>N>H>M>K
+11: W>R
+10: H>K>W>N>M
+10: R
+10: W>H>M>N
+10: W>N>H>K>M
+9: H>N>M>K>W
+9: K>H>M>N>R
+9: K>H>N>M
+9: K>M>H>N>R
+9: M>N>H
+9: M>N>K>H>W
+9: W>M>K>N>H
+8: H>K>W>M
+8: H>M>K>N
+8: K>N>H
+8: K>N>M>H
+8: M>H>N
+8: M>N>H>K>W
+8: M>N>H>W>K
+8: W>N>H
+7: H>K>N
+7: K>N>M>W>H
+7: M>N>K
+7: W>M>H>N
+7: W>M>N>K>H
+6: H>N
+6: K>H>N>M>R
+6: K>H>N>W>M
+6: K>N>H>M
+6: K>W>H>N>M
+6: K>W>N>H>M
+6: M>K>H>N>R
+5: H>K>M>R>N
+5: H>K>N>M
+5: H>M>N
+5: H>N>K>M>W
+5: H>N>M
+5: H>W>K>N>M
+5: K>H>W>N>M
+5: K>W>N>M>H
+5: M>R
+5: M>W>H>N
+5: W>H>N>M
+5: W>K>H>M
+5: W>N>M>H>K
+4: H>N>K>M
+4: H>W>N
+4: K>H>M>R>N
+4: K>R
+4: K>R>M>H>N
+4: K>W>M>N
+4: M>H>W>N
+4: M>H>W>R
+4: M>K>N>W>H
+4: M>K>W>N
+4: M>N
+4: N>H>K>M>W
+4: W>H>R
+4: W>M>R
+4: W>N>M>K
+4: W>N>M>K>H
+3: H>M>K>R>N
+3: H>M>R
+3: H>N>M>K>R
+3: H>W>M>N
+3: H>W>N>M
+3: K>H>R>M>N
+3: K>M>N>H>R
+3: K>N>H>W>M
+3: K>N>W>M>H
+3: M>K>H>W>R
+3: M>K>R
+3: M>W>K>N>H
+3: M>W>N
+3: N
+3: N>K
+3: N>W
+3: R>K
+3: R>M
+3: R>W
+3: W>M>N
+3: W>N>R
+2: H>K>M>R>W
+2: H>K>N>M>R
+2: H>K>R>M>N
+2: H>M>K>R>W
+2: H>M>K>W>R
+2: H>M>N>K
+2: H>N>K
+2: H>N>K>W>M
+2: H>N>W
+2: H>N>W>M>K
+2: H>W>N>K>M
+2: H>W>R
+2: K>H>R
+2: K>M>R
+2: K>M>W>R
+2: K>N>H>W
+2: K>N>M>R>H
+2: K>N>W
+2: K>W>H>N
+2: M>H>K>N>R
+2: M>H>N>K
+2: M>H>W>N>R
+2: M>H>W>R>K
+2: M>K>H>R>N
+2: M>N>H>W
+2: M>N>K>H
+2: M>N>K>W
+2: M>N>W
+2: M>N>W>H>K
+2: M>N>W>K>H
+2: M>R>K>H>N
+2: N>K>M
+2: N>K>M>W>H
+2: R>M>H
+2: R>M>H>K>N
+2: R>M>H>N>K
+2: R>M>N>H>K
+2: W>H>M>N>R
+2: W>K>H>N
+2: W>K>N
+2: W>K>N>H>M
+2: W>M>N>K
+2: W>N>K>M>H
+2: W>R>M>H>K
+2: W>R>M>K
+1: H>K>M>N>R
+1: H>K>M>W>R
+1: H>K>N>W
+1: H>K>W>N
+1: H>K>W>N>R
+1: H>M>K>N>R
+1: H>M>N>K>R
+1: H>M>W>N
+1: H>M>W>R>N
+1: H>N>K>W
+1: H>N>M>K
+1: H>N>M>R>K
+1: H>N>M>W
+1: H>N>M>W>K
+1: H>N>R
+1: H>N>R>M>K
+1: H>N>W>K>M
+1: H>R
+1: H>W>K>M>R
+1: K>H>M>R
+1: K>H>M>R>W
+1: K>H>N>R>M
+1: K>H>W>N
+1: K>M>H>R
+1: K>M>H>W>R
+1: K>M>N>R>W
+1: K>M>N>W
+1: K>M>R>W>N
+1: K>N>H>R
+1: K>N>H>R>W
+1: K>N>M>H>R
+1: K>N>M>W>R
+1: K>N>R
+1: K>N>R>M>W
+1: K>N>W>H>M
+1: K>R>H>M>N
+1: K>R>M
+1: K>R>M>H
+1: K>R>W
+1: K>R>W>H>N
+1: K>R>W>N>H
+1: K>W>H>M>R
+1: K>W>N>M
+1: K>W>N>M>R
+1: M>H>N>W
+1: M>H>N>W>R
+1: M>K>H>R>W
+1: M>K>N>H>R
+1: M>K>N>R>H
+1: M>K>N>W
+1: M>K>R>W
+1: M>K>R>W>N
+1: M>N>H>K
+1: M>N>H>K>R
+1: M>N>R>H>K
+1: M>N>W>K
+1: M>N>W>R>K
+1: M>R>H>K>N
+1: M>R>N
+1: M>R>N>H
+1: M>W>H>R
+1: M>W>N>K>H
+1: M>W>R
+1: M>W>R>N>K
+1: N>H>K
+1: N>H>M
+1: N>H>M>K>W
+1: N>H>W
+1: N>H>W>M>K
+1: N>K>H>M
+1: N>K>H>M>R
+1: N>K>H>W
+1: N>K>M>H
+1: N>K>M>H>W
+1: N>K>M>W>R
+1: N>K>W>M>H
+1: N>M>H
+1: N>M>H>W>K
+1: N>M>W>H>K
+1: N>M>W>K>R
+1: N>R
+1: N>W>K>H>M
+1: R>H
+1: R>H>K>W>M
+1: R>K>H>N>M
+1: R>K>M
+1: R>K>W>M
+1: R>M>K>H>N
+1: R>M>K>W
+1: R>W>H>N>M
+1: R>W>N>M>K
+1: W>H>K>M>R
+1: W>H>M>R>K
+1: W>H>M>R>N
+1: W>H>N>M>R
+1: W>H>R>M
+1: W>H>R>M>N
+1: W>H>R>N
+1: W>K>N>M
+1: W>K>N>M>H
+1: W>M>H>K>R
+1: W>M>K>H>R
+1: W>M>K>N
+1: W>M>N>H
+1: W>M>R>H>K
+1: W>N>H>M>R
+1: W>N>H>R>M
+1: W>N>K
+1: W>N>K>H>M
+1: W>N>M
+1: W>N>M>H
+1: W>R>H>M>N
+1: W>R>K
+1: W>R>M
+1: W>R>M>H>N
+1: W>R>N
+
+1: W>H>K=M   
+1: M>H>N=W>K   
+
+1: K=R>W>M>H>N
+1: W=R>H>M>N>K
+1: W=R>M
+1: W=R>M>K>H
+---end of votes---
+
+384 voter types  (380 at least partly valid). 
+5 candidates plus write-ins (combined regarded as 6th). 
+8980 votes, 8976 at least partly valid.
+
+The last 6 votes included tied-rankings among candidates not at the bottom-end of
+the ordering.
+
+Laatu's explanation of why (he thinks) his counts differ from the official counts:
+4 out of the 6 votes with ties (the last 4 listed above) were considered "exhausted"
+i.e. not used in the official counts.
+It seems this decision was made when the calculation algorithm read the tied
+part.  In one of the remaining 2 ballots with ties the algorithm did not need to
+read the tied parts of the ballot to compute the IRV winner & IRV round-totals. 
+Finally, it seems that the other remaining ballot was
+not "exhausted" because one of the tied candidates was already
+eliminated when the calculation reached that point! 
+
+I don't know if these differences in handling of the ties ("exhausted if met", 
+"ok if not met", "ok if met only after elimination of the other tied candidate"?) 
+should be considered a bug or a feature of the counting algorithm.
+
+W.D. Smith & Jan Kok comment:
+Actually, the official method -- discarding ballots with the top-two entries ranked equal --
+!seems stupid to us.  It is a holdover from the olden pre-computer days when a ballot had to be 
+put in one or the other pile.   Since this election was counted by computer there was nothing
+stopping the computer from putting HALF of the vote in BOTH piles.  That, it seems to us,
+would have more-accurately reflected what the voter wanted (versus just discarding her 
+vote entirely).
+
+But anyhow, the bottom line is that the disagreements between the 
+Laatu, Official, and Univ. of Vermont counts all were so small (at most 5 votes) 
+that in this particular election that they were unable to affect any of our conclusions.
+=========================================================================
+
+Here is a summary of Juho Laatu's summary (by WD Smith) 
+also including comparisons with (WDS's deductions from) the Univ. of Vermont
+counts.
+
+Laatu and the UVM counts do not always agree, but in no case is the disagreement 
+more than 5 votes. 
+
+Here's Juho Laatu's vote-summary with all candidates besides W,M,K eliminated,
+replacements such as "M>K becomes M>K>W" and "W>K=M becomes W" made,
+and reordered to group common vote-types together:
+
+M>K>W
+1332 = 200+145+93+83+72+69+61+53+50+46+43+41+38+38+27+27+26+24+22+18+13+12+11+11+9+9+8+8+7+6+4+4+3+3+3+3+2+2+2+2+2+2+2+2+2+2+2+2+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1
+
+M>W>K
+767 = 94+62+60+57+56+52+39+37+37+34+32+31+27+23+20+15+13+12+11+8+5+4+4+3+3+2+2+2+2+2+2+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1
+
+M       (note: UVM's count had only 451)
+455 = 178+139+90+9+8+5+5+5+4+3+3+2+1+1+1+1
+
+K>M>W   (note: UVM's count had 2047)
+2043 = 355+234+123+121+120+103+88+80+71+60+58+55+52+48+42+41+32+29+27+24+24+23+21+16+14+14+13+13+12+9+9+9+8+7+6+6+5+5+5+4+4+4+4+3+3+2+2+2+2+2+2+2+2+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1
+
+K>W>M
+371 = 66+39+31+26+21+16+15+15+13+12+12+12+11+10+8+6+6+6+5+5+4+3+3+2+2+2+2+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1
+
+K       (note: UVM's count had 564)
+568 = 326+125+51+19+15+8+7+4+3+3+2+2+1+1+1
+
+W>M>K   (note: UVM's count had 1517)
+1513 = 256+147+122+104+102+101+90+76+69+54+52+50+46+45+28+19+17+15+12+11+10+9+7+7+5+5+4+4+4+3+3+3+2+2+2+2+2+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1
+
+W>K>M   (note: UVM's count had 496)
+495 = 80+52+50+45+30+27+24+21+21+19+17+16+15+15+12+12+10+5+5+2+2+2+2+2+1+1+1+1+1+1+1+1+1
+
+W       (note: UVM's count had 1284)
+1289 = 840+271+93+25+16+11+8+4+4+3+3+3+2+2+1+1+1+1
+
+total
+8833 = 1332+767+2043+371+495+1513+1289+568+455
+
+Note: there were also 147=124+10+6+3+1+1+1+1 votes
+which gave no preference amongst K,M,W.  They were:
+124: H
+10: R
+6: H>N
+3: N
+1: H>N>R
+1: H>R
+1: N>R
+1: R>H
+
+larger total
+8980 = 8833 + 147
+
+====================================================
+
+VARIOUS VOTING SYSTEMS USING THE (FULL or ABBREVIATED) LAATU VOTE COUNTS:
+
+All of these voting methods (since they are Condorcet methods) elect MONTROLL
+using either the *full* or *abbreviated* (both work) Laatu counts:
+Nanson-Baldwin
+Black
+Raynaud
+Schulze
+Simpson-Kramer
+Tideman ranked pairs
+Copeland
+Small
+
+Also electing MONTROLL using the *full* Laatu counts:
+Borda
+Dodgson
+Arrow-Raynaud 
+
+Warning these counts may be slightly off (but it should not be enough to matter):
+Counts of 1st choices: H(1306) - K(2586) - M(2063) - N(35) - R(40) - W(2954) 
+Counts of 2nd choices: H(2107) - K(1404) - M(2637) - N(307) - R(50) - W(994)
+Counts of 3rd choices: H(1806) - K(962) - M(1398) - N(659) - R(42) - W(722) 
+
+Probably also Approval and Range voting both would have 
+elected MONTROLL (because it is very rare that range/approval winners 
+differ from Condorcet winners and there are theoretical reasons for that) 
+but we cannot be sure since we only have rank-order ballot data.  
+
+Some approval-variants using *full* Laatu counts (which probably are
+not terribly realistic as guesses for what plain-approval would do):
+Approval of top-1-only (i.e. plurality) elects WRIGHT (Kiss 2nd).
+Approval of top-1 and half-approval of 2nd choice elects WRIGHT (Montroll 2nd).
+Approval of top-1 and (2/3)-approval of 2nd choice elects MONTROLL.
+Approval of top-2 elects MONTROLL.
+Approval of top-2 and half-approval of 3rd choice elects MONTROLL.
+Approval of top-3 elects MONTROLL.
+
+These methods elect MONTROLL using the {M,K,W}-only Laatu counts with 
+"M" regarded as half M>W>K and half M>K>W, etc:
+Coombs
+AntiPlurality (which in this case is top-two approval)
+Bucklin
+Dodgson
+Borda (here equivalent to approval of top and half-approval of 2nd-choice)
+Every Condorcet method
+
+Elects WRIGHT:
+Plurality (which is top-one approval)
+
+Elects KISS using the {M,K,W}-only Laatu counts (regarding
+"M" as half M>W>K and half M>K>W, or not, either way):
+IRV.
+
+It thus appears IRV and Plurality are uniquely bad performers in this election -- 
+pretty much every other voting method mankind ever invented would elect MONTROLL.
+
+Here are the {M,K,W}-only Laatu vote counts:
+1332:	M>K>W
+767:	M>W>K
+455:	M
+2043:	K>M>W
+371:	K>W>M
+568:	K
+1513:	W>M>K
+495:	W>K>M
+1289:	W
+
+which yield this defeats matrix:
+Canddt	K    M	     W
+K	*    3477    4314
+M	4067 *	     4597
+W	4064 3668    *
+
+But UVM found the following slightly different matrix:
+Canddt	K    M	     W
+K	*    3478    4314
+M	4067 *	     4597
+W	4064 3668    *
+[Either way Montroll is a beats-all winner.]
+corresponding to these counts
+1332:	      M>K>W
+767:	      M>W>K
+451:	      M
+2047:	      K>M>W
+371:	      K>W>M
+564:	      K
+1517:	      W>M>K
+496:	      W>K>M
+1284:	      W
+
+Using the Laatu {W,K,M}-only vote counts the IRV election proceeds:
+Canddts	Rnd#1   Rnd#2
+K	 2982	4314 (wins)
+W	 3297	4064
+M	 2554	
+which if the 495 plus 258 of the 1289 W-votes are switched to K is
+1332:	M>K>W
+767:	M>W>K
+455:	M
+2043:	K>M>W
+371:	K>W>M
+1342:	K
+1513:	W>M>K
+0:	W>K>M
+1031:	W
+yielding this IRV election
+K	 3755 3755
+M	 2554 4067 (wins)
+W	 2544
+
+which is slightly different from the official IRV election:
+Canddts	Rnd#1   Rnd#2
+K	2981    4313 (wins)
+W   	3294    4061
+M   	2554    
+
+while the UVM counts yield:
+Canddts	Rnd#1   Rnd#2
+K	2982    4314 (wins)
+W	3297    4064
+M	2550    
+
+Here are the {M,K,W}-only Laatu vote counts with "M" regarded 
+as half M>W>K and half M>K>W, etc (note: all these counts *doubled*):
+3119:   M>K>W
+1989:   M>W>K
+4654:   K>M>W
+1310:   K>W>M
+4315:   W>M>K
+2279:   W>K>M
+
+This is the pairwise matrix they yield (with *doubled* entries):
+        K	M	W
+K	*	8243	9083
+M	9423	*	9762
+W	8583	7904	*
+
+The *full* pairwise matrix (but, unlike above matrices, now counting
+voters who do not express a preference for A vs B as half A>B and half B>A):
+Canddt 	H	K	M	N	R	W
+H	*	4305.5	3702.5	6916	7460	4399
+K	4674.5	*	4195	6826	7506.5	4615
+M	5277.5	4785	*	7328	7767	4954.5
+N	2064	2154	1652	*	6076.5	2507.5
+R	1520	1473.5	1213	2903.5	*	1540
+W	4581	4365	4025.5	6472.5	7440	*
+
+The *full* pairwise matrix (usual count this time, BUT wins only):
+Canddt	    H	   K	M	N	R	W
+H	    *	   0	0	5573	6057	0
+K	    3946   *	0	5517	6149	4314
+M	    4573   4067	*	6267	6658	4597
+N	    0	   0	0	*	3338	0
+R	    0	   0	0	0	*	0
+W	    3975   0	0	5274	6063	*
+
+(also showing losses):
+Option	    H	   K	M	N	R	W
+H	    *	   3577	2998	5573	6057	3793
+K	    3946   *	3477	5517	6149	4314
+M	    4573   4067	*	6267	6658	4597
+N	    721	   845	591	*	3338	1309
+R	    117	   116	104	165	*	163
+W	    3975   4064	3668	5274	6063	*
+
+Note that M defeated every opponent pairwise, and the "big three"
+{M,K,W} pairwise-defeated everybody not in the Big Three.
+
+KEENER EIGENVECTOR VOTING:
+M := matrix(6,6, [
+   1,	  3578, 2999,	5574,	6058,	3794,
+   3947,   1,	3478,	5518,	6150,	4315,
+   4574,  4068,	1,	6268,	6659,	4598,
+   722,	   846,	592,	1,	3339,	1310,
+   118,	   117,	105,	166,	1,	164,
+   3976,   4065,3669,	5275,	6064,	1]);
+eigenvectors(M);
+???
+
+M := matrix(3,3, [
+ 1,    3478,    4315,
+4068, 1,	4598,
+4065, 3669, 1] );
+eigenvectors(M);
+All 3 eigenvectors real. The one with greatest eigenvalue 8041.7 is
+(0.563441903756, 0.626340182887, 0.467281589294)
+which anoints M (MONTROLL) the winner with 0.626 ???
+
+Reversed ballots:              
+    1332: M>K>W
+     767: M>W>K           
+     455: M
+    2043: K>M>W                  
+     371: K>W>M 
+     568: K                       
+    1513: W>M>K
+     495: W>K>M                   
+    1289: W 
+W wins (plur) 3886.5 = 568/2 + 2043 + 455/2 + 1332                                         
+K = 3152 = 767 + 455/2 + 1513 + 1289/2           
+M = 1794.5 = 371 + 568/2 + 495 + 1289/2          
+W is a winner with every method in sight (Borda, all Condorcets, IRV) with reversed ballots             
+reversed IRV:                    
+W  3886.5  4541.5 (wins)         
+K  3152    4291.5                
+M  1794.5                        
+
+Possible interesting future calculation: try Sinkhorn & Keener-eigenvector.
+
+Full IRV election proceeds:
+eliminate N(35)
+eliminate R(37)
+eliminate H(1317)
+eliminate M(2554)
+eliminate W(4060)
+winner K(4313)
+
+If the 840 W-only votes artificially removed then
+eliminate N(35)
+eliminate R(37)
+eliminate H(1317)
+eliminate W(2454)
+eliminate K(3476)
+winner M(4064)
+
+The STATED SECOND PREFERENCES OF W-TOP VOTERS ABOUT M-versus-K WERE
+1510: M
+495: K
+*after* all candidates besides {W,M,K} eliminated.   This is a 3.05:1 ratio.
+
+If however we assess this *before* eliminating anybody, then the 
+STATED SECOND PREFERENCES OF W-TOP VOTERS ABOUT M-versus-K INSTEAD WERE
+1340: M
+430: K
+This is a 3.12:1 ratio.
+
+REALISTIC APPROVAL VOTING (DEDUCTION):
+Stephen Unger noted the voter were allowed to rank only SOME of the candidates.
+If rank K only: assume they would with approval voting, approve K only (among the Big Three K,M,W).
+If rank K and M only: assume they would approve both K and M but not W.
+If rank all three (K,M, and W) then assume they would approve their top 2 with some
+frequency X (0<X<1) but otherwise (with frequency 1-X) would approve only their top 1 among the
+big three.   We will now explain the details of how we reach the conclusion that MONTROLL
+would under these assumptions be th approval-votng winner REGARDLESS of the value of X.
+
+STEP 1 Here are the votes re-sorted to group various ranked-candidate-sets together:
+NONE of K,M,W RANKED:
+124: H
+10: R
+6: H>N
+3: N
+1: H>N>R
+1: H>R
+1: N>R
+1: R>H
+
+K ONLY RANKED:
+326: K
+125: K>H
+51: H>K
+19: K>N
+15: K>H>N
+8: K>N>H
+7: H>K>N
+4: K>R
+3: N>K
+3: R>K
+2: H>N>K
+2: K>H>R
+1: K>N>H>R
+1: K>N>R
+1: N>H>K
+
+M ONLY RANKED:
+178: M
+139: M>H
+90: H>M
+9: M>N>H
+8: M>H>N
+5: H>M>N
+5: H>N>M
+5: M>R
+4: M>N
+3: H>M>R
+3: R>M
+2: R>M>H
+1: M>R>N
+1: M>R>N>H
+1: N>H>M
+1: N>M>H
+
+W ONLY RANKED:
+840: W
+271: W>H
+93: H>W
+25: W>N
+16: W>H>N
+11: W>R
+8: W>N>H
+4: H>W>N
+4: W>H>R
+3: N>W
+3: R>W
+3: W>N>R
+2: H>N>W
+2: H>W>R
+1: N>H>W
+1: W>H>R>N
+1: W>R>N
+
+K&M BUT NOT W RANKED:
+355: K>M
+234: K>M>H
+200: M>K
+145: M>K>H
+121: K>H>M
+93: M>H>K
+88: H>K>M
+83: H>M>K
+52: K>M>N
+42: K>M>H>N
+41: K>M>N>H
+22: M>K>H>N
+21: K>H>M>N
+16: K>N>M
+13: H>K>M>N
+13: M>H>K>N
+12: M>K>N
+11: M>K>N>H
+9: K>H>M>N>R
+9: K>H>N>M
+9: K>M>H>N>R
+8: H>M>K>N
+8: K>N>M>H
+7: M>N>K
+6: K>H>N>M>R
+6: K>N>H>M
+6: M>K>H>N>R
+5: H>K>M>R>N
+5: H>K>N>M
+4: H>N>K>M
+4: K>H>M>R>N
+4: K>R>M>H>N
+3: H>M>K>R>N
+3: H>N>M>K>R
+3: K>H>R>M>N
+3: K>M>N>H>R
+3: M>K>R
+2: H>K>N>M>R
+2: H>K>R>M>N
+2: H>M>N>K
+2: K>M>R
+2: K>N>M>R>H
+2: M>H>K>N>R
+2: M>H>N>K
+2: M>K>H>R>N
+2: M>N>K>H
+2: M>R>K>H>N
+2: N>K>M
+2: R>M>H>K>N
+2: R>M>H>N>K
+2: R>M>N>H>K
+1: H>K>M>N>R
+1: H>M>K>N>R
+1: H>M>N>K>R
+1: H>N>M>K
+1: H>N>M>R>K
+1: H>N>R>M>K
+1: K>H>M>R
+1: K>H>N>R>M
+1: K>M>H>R
+1: K>N>M>H>R
+1: K>R>H>M>N
+1: K>R>M
+1: K>R>M>H
+1: M>K>N>H>R
+1: M>K>N>R>H
+1: M>N>H>K
+1: M>N>H>K>R
+1: M>N>R>H>K
+1: M>R>H>K>N
+1: N>K>H>M
+1: N>K>H>M>R
+1: N>K>M>H
+1: R>K>H>N>M
+1: R>K>M
+1: R>M>K>H>N
+
+K&W BUT NOT M RANKED:
+80: W>K
+66: K>W
+30: W>H>K
+21: W>K>H
+16: H>W>K
+13: K>H>W
+12: K>W>H
+11: H>K>W
+2: K>N>H>W
+2: K>N>W
+2: K>W>H>N
+2: W>K>H>N
+2: W>K>N
+1: H>K>N>W
+1: H>K>W>N
+1: H>K>W>N>R
+1: H>N>K>W
+1: K>H>W>N
+1: K>N>H>R>W
+1: K>R>W
+1: K>R>W>H>N
+1: K>R>W>N>H
+1: N>K>H>W
+1: W>N>K
+1: W>R>K
+
+M&W BUT NOT W RANKED:
+256: W>M
+147: W>M>H
+122: W>H>M
+94: M>W
+62: M>H>W
+57: M>W>H
+50: H>W>M
+37: H>M>W
+10: W>H>M>N
+7: W>M>H>N
+5: M>W>H>N
+5: W>H>N>M
+4: M>H>W>N
+4: M>H>W>R
+4: W>M>R
+3: H>W>M>N
+3: H>W>N>M
+3: M>W>N
+3: W>M>N
+2: M>H>W>N>R
+2: M>N>H>W
+2: M>N>W
+2: W>H>M>N>R
+1: H>M>W>N
+1: H>M>W>R>N
+1: H>N>M>W
+1: M>H>N>W
+1: M>H>N>W>R
+1: M>W>H>R
+1: M>W>R
+1: R>W>H>N>M
+1: W=R>M
+1: W>H>M>R>N
+1: W>H>N>M>R
+1: W>H>R>M
+1: W>H>R>M>N
+1: W>M>N>H
+1: W>N>H>M>R
+1: W>N>H>R>M
+1: W>N>M
+1: W>N>M>H
+1: W>R>H>M>N
+1: W>R>M
+1: W>R>M>H>N
+
+ALL THREE RANKED:
+123: K>M>H>W>N
+120: K>M>H>N>W
+104: W>M>H>N>K
+103: K>M>N>H>W
+102: W>M>H>K>N
+101: W>H>M>K>N
+90: W>H>M>N>K
+80: K>H>M>N>W
+76: W>H>N>M>K
+72: M>K>H>W>N
+71: K>M>W>H>N
+69: M>H>K>W>N
+69: W>M>K>H>N
+61: M>K>H>N>W
+60: K>M>H>W
+60: M>W>H>K>N
+58: H>K>M>N>W
+56: M>W>K>H>N
+55: K>H>M>W>N
+54: W>M>H>K
+53: M>H>K>N>W
+52: H>W>M>K>N
+52: M>H>W>K>N
+52: W>H>K>M>N
+50: M>K>W>H>N
+50: W>K>M>H>N
+48: K>M>W
+46: M>K>W
+46: W>M>K
+45: W>H>M>K
+45: W>K>H>M>N
+43: H>M>K>W>N
+41: M>H>K>W
+39: K>W>M>H>N
+39: M>W>H>N>K
+38: H>M>K>N>W
+38: M>K>H>W
+37: M>W>H>K
+34: M>W>K
+32: H>K>M>W>N
+32: M>H>W>K
+31: H>M>W>K>N
+31: K>W>M
+29: K>H>M>W
+28: H>W>M>N>K
+27: H>K>M>W
+27: H>M>W>K
+27: H>W>K>M>N
+27: M>H>N>K>W
+27: M>K>N>H>W
+26: H>M>K>W
+26: K>H>W>M>N
+24: K>M>W>H
+24: K>N>M>H>W
+24: M>K>W>H
+24: W>K>M
+23: K>H>N>M>W
+23: M>H>W>N>K
+21: K>W>H>M>N
+21: W>K>M>N>H
+20: M>W>K>H
+19: W>H>K>M
+19: W>M>N>H>K
+18: H>M>N>K>W
+17: H>W>M>K
+17: W>H>K>N>M
+16: H>K>W>M>N
+15: H>M>N>W>K
+15: K>H>W>M
+15: K>W>H>M
+15: W>H>N>K>M
+15: W>K>M>H
+15: W>M>K>H
+14: H>K>N>M>W
+14: K>M>W>N>H
+13: H>M>W>N>K
+13: K>M>N>W>H
+12: H>W>K>M
+12: H>W>N>M>K
+12: K>N>H>M>W
+12: K>W>M>H
+12: K>W>M>N>H
+12: M>W>N>H>K
+12: W>K>H>N>M
+11: M>H>N>W>K
+11: M>K>W>N>H
+11: W>N>H>M>K
+10: H>K>W>N>M
+10: W>N>H>K>M
+9: H>N>M>K>W
+9: M>N>K>H>W
+9: W>M>K>N>H
+8: H>K>W>M
+8: M>N>H>K>W
+8: M>N>H>W>K
+7: K>N>M>W>H
+7: W>M>N>K>H
+6: K>H>N>W>M
+6: K>W>H>N>M
+6: K>W>N>H>M
+5: H>N>K>M>W
+5: H>W>K>N>M
+5: K>H>W>N>M
+5: K>W>N>M>H
+5: W>K>H>M
+5: W>N>M>H>K
+4: K>W>M>N
+4: M>K>N>W>H
+4: M>K>W>N
+4: N>H>K>M>W
+4: W>N>M>K
+4: W>N>M>K>H
+3: K>N>H>W>M
+3: K>N>W>M>H
+3: M>K>H>W>R
+3: M>W>K>N>H
+2: H>K>M>R>W
+2: H>M>K>R>W
+2: H>M>K>W>R
+2: H>N>K>W>M
+2: H>N>W>M>K
+2: H>W>N>K>M
+2: K>M>W>R
+2: M>H>W>R>K
+2: M>N>K>W
+2: M>N>W>H>K
+2: M>N>W>K>H
+2: N>K>M>W>H
+2: W>K>N>H>M
+2: W>M>N>K
+2: W>N>K>M>H
+2: W>R>M>H>K
+2: W>R>M>K
+1: H>K>M>W>R
+1: H>N>M>W>K
+1: H>N>W>K>M
+1: H>W>K>M>R
+1: K=R>W>M>H>N
+1: K>H>M>R>W
+1: K>M>H>W>R
+1: K>M>N>R>W
+1: K>M>N>W
+1: K>M>R>W>N
+1: K>N>M>W>R
+1: K>N>R>M>W
+1: K>N>W>H>M
+1: K>W>H>M>R
+1: K>W>N>M
+1: K>W>N>M>R
+1: M>H>N=W>K
+1: M>K>H>R>W
+1: M>K>N>W
+1: M>K>R>W
+1: M>K>R>W>N
+1: M>N>W>K
+1: M>N>W>R>K
+1: M>W>N>K>H
+1: M>W>R>N>K
+1: N>H>M>K>W
+1: N>H>W>M>K
+1: N>K>M>H>W
+1: N>K>M>W>R
+1: N>K>W>M>H
+1: N>M>H>W>K
+1: N>M>W>H>K
+1: N>M>W>K>R
+1: N>W>K>H>M
+1: R>H>K>W>M
+1: R>K>W>M
+1: R>M>K>W
+1: R>W>N>M>K
+1: W=R>H>M>N>K
+1: W=R>M>K>H
+1: W>H>K=M
+1: W>H>K>M>R
+1: W>H>M>R>K
+1: W>K>N>M
+1: W>K>N>M>H
+1: W>M>H>K>R
+1: W>M>K>H>R
+1: W>M>K>N
+1: W>M>R>H>K
+1: W>N>K>H>M
+
+CALCULATION PROCEEDS
+I am removing a "W>K=M" vote from the KMW set and placing it in the W set.
+Then here are the counts of vots ranking various subsets of {K,M,W}:
+
+emptyset=147 = 124+10+6+3+1+1+1+1
+k=568
+m=455
+w=1289
+km=1720
+kw=271
+mw=905
+kmw=3625
+
+approvals if the all-three-ranked votes are ignored:
+k=2559=568+1720+271
+m=3080=455+1720+905
+w=2465=1289+271+905
+
+Looking at the 3625 votes ranking all three of {K,M,W} we find these 6=3! counts:
+kmw=962
+kwm=253
+mwk=488
+mkw=693
+wkm=342
+wmk=887
+
+approvals if fraction 1-X of the 3-ranked votes approve top-1 and X approve top-2:
+
+k=2559+962+253+X*(693+342);
+m=3080+488+693+X*(962+887);
+w=2465+342+887+X*(253+488);
+
+simplify to get final result:
+  k = 3774 + 1035 X
+  m = 4261 + 1849 X
+  w = 3694 + 741 X
+MONTROLL is the approval-voting winner for EVERY X value with 0<=X<=1.
+
+This election featured 1481 = 840 + 326 + 178 + 124 + 10 + 3
+"bullet style" votes (ranking exactly one candidate) out of 8980 valid ballots (16.5%).
+It also had 
+1931=355+271+256+200+139+125+94+93+90+80+66+51+25+19+19+11+6+5+4+4+3+3+3+3+3+1+1+1
+balots ranking exactly two (21.5%)
+
+YET ANOTHER APPROVAL-VOTING SIMULATION (by Juho Laatu):
+In the web page you referred to "big
+three". There might actually be four.
+I made 100 simulations where voters
+approved random number of candidates
+that they marked on their ballot
+(from 1 (first) to length of the
+vote). (Equals were ignored. All
+voters that voted the same way also
+approved the same candidates.)
+
+The result of this limited test
+was that Montroll won in 72.8% of
+the simulations, Smith won 14.3% and
+Kiss won 12.8%.  Wright never won.
+
+The assumptions were purely technical
+and did not take into account any
+psychological implications or the real
+life political set-up. Maybe they were
+quite reasonable though. With these
+assumptions Montroll seems to be the
+most probable winner. Wright didn't
+win in any of the simulations. Smith
+was also a strong candidate, about as
+strong as Kiss. Simpson got plenty of
+approvals (more that what the number
+of his first preference votes would
+indicate) although he didn't win any
+simulations.
+
+--end.
