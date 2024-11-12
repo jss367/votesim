@@ -36,13 +36,10 @@ def get_pairwise_victories(
     return victories
 
 
-def beats_or_ties(cand1: Candidate, cand2: Candidate, victories: Dict[Tuple[Candidate, Candidate], int]) -> bool:
-    """Helper function to check if candidate 1 beats or ties candidate 2."""
-    # If cand1 beats cand2 with a positive margin, or neither beats the other (tie)
-    return (
-        ((cand1, cand2) in victories and (cand2, cand1) not in victories)
-        or ((cand1, cand2) in victories and (cand2, cand1) in victories)
-        or ((cand1, cand2) not in victories and (cand2, cand1) not in victories)
+def beats(cand1: Candidate, cand2: Candidate, victories: Dict[Tuple[Candidate, Candidate], int]) -> bool:
+    """Helper function to check if candidate 1 strictly beats candidate 2."""
+    return (cand1, cand2) in victories and (
+        (cand2, cand1) not in victories or victories[(cand1, cand2)] > victories[(cand2, cand1)]
     )
 
 
@@ -51,40 +48,39 @@ def get_smith_set(candidates: List[Candidate], victories: Dict[Tuple[Candidate, 
     Find the Smith set - smallest set of candidates that beats all others pairwise.
     A candidate is in the Smith set if they beat or tie all candidates outside the set.
     """
+
+    def dominates(cand1: Candidate, cand2: Candidate) -> bool:
+        """Returns True if cand1 beats cand2 in a pairwise contest."""
+        return beats(cand1, cand2, victories)
+
     # Start with all candidates
-    smith_set = set(candidates)
+    current_set = set(candidates)
 
-    # Keep removing candidates until we can't anymore
-    changed = True
-    while changed:
-        changed = False
-        for cand in list(smith_set):  # Create list to avoid modifying set during iteration
-            # Check if this candidate should be in Smith set
-            # They must beat or tie ALL candidates outside current Smith set
-            beats_or_ties_all_outside = True
-            for other in candidates:
-                if other == cand or other in smith_set:
-                    continue
+    # Keep trying to remove candidates until we can't
+    while True:
+        can_remove = set()
 
-                # If they don't beat or tie this outside candidate, they shouldn't be in Smith set
-                if not beats_or_ties(cand, other, victories):
-                    beats_or_ties_all_outside = False
-                    break
+        # For each candidate in current set
+        for cand in current_set:
+            # Check if there exists another candidate that dominates this one
+            for other in current_set:
+                if other != cand and dominates(other, cand):
+                    # Check if cand doesn't dominate any candidate that doesn't dominate them
+                    dominated_by_cand = {c for c in current_set if dominates(cand, c)}
+                    dominates_cand = {c for c in current_set if dominates(c, cand)}
+                    if not (dominated_by_cand - dominates_cand):
+                        can_remove.add(cand)
+                        break
 
-            # If they don't beat or tie all outside candidates, remove them
-            if not beats_or_ties_all_outside:
-                smith_set.remove(cand)
-                changed = True
+        if not can_remove:
+            break
 
-    # Handle special case: if smith_set is empty, return candidate(s) with most pairwise victories
-    if not smith_set:
-        win_counts = {c: 0 for c in candidates}
-        for winner, _ in victories:
-            win_counts[winner] += 1
-        max_wins = max(win_counts.values())
-        smith_set = {c for c in candidates if win_counts[c] == max_wins}
+        # Remove the candidate with the "weakest" performance
+        if can_remove:
+            weakest = min(can_remove, key=lambda c: sum(1 for x in current_set if dominates(c, x)))
+            current_set.remove(weakest)
 
-    return smith_set
+    return current_set
 
 
 def get_approval_scores(candidates: List[Candidate], approval_ballots: List[ApprovalBallot]) -> Dict[Candidate, int]:
