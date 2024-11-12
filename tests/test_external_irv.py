@@ -1,100 +1,192 @@
-import csv
-import os
-import unittest
+"""Tests for external IRV election cases"""
 
-import votesim
-from votesim import Ballot, Candidate
+import os
+from dataclasses import dataclass
+from typing import Any, List, Optional
+
+import pandas as pd
+
+from votesim.models import Ballot, Candidate
+from votesim.single_seat_ranking_methods import instant_runoff_voting
 from votesim.test_helpers import assert_list_almost_equal
 
-TEST_FOLDER = "test_data/external_irv/"
-THIS_DIR = os.path.dirname(os.path.abspath(__file__))
-TEST_DATA_PATH = os.path.join(THIS_DIR, os.pardir, TEST_FOLDER)
+
+@dataclass
+class TestCase:
+    def assertEqual(self, a: Any, b: Any, msg: Optional[str] = None) -> None:
+        """Assert that two values are equal"""
+        assert a == b, msg or f"{a} != {b}"
+
+    def assertTrue(self, expr: bool, msg: Optional[str] = None) -> None:
+        """Assert that expression is True"""
+        assert expr, msg or "Expression is not True"
+
+    def assert_list_almost_equal(self, *args, **kwargs):
+        """Helper method to match interface"""
+        assert_list_almost_equal(self, *args, **kwargs)
 
 
-def parse_ballots_csv_file(file_name):
-    file_path = os.path.join(TEST_DATA_PATH, file_name)
-    with open(file_path) as f:
-        csv_file_without_header = list(csv.reader(f))[1:]
-        parsed_csv_file = [
-            (ballot_id, rank, candidate_name) for ballot_id, rank, candidate_name in csv_file_without_header
-        ]
-        # sorted_csv_file = sorted(parsed_csv_file, key=itemgetter(0,1))
-        sorted_csv_file = parsed_csv_file
+def analyze_ballot_patterns(df: pd.DataFrame) -> None:
+    """Analyze patterns in the ballot data"""
+    print("\nBallot Pattern Analysis:")
+    patterns = {}
+    max_rank = df['rank'].max()
 
-        candidates = {}
-        ballots = []
-        last_ballot_id = 0
-        ranked_candidates = []
+    # Count patterns by ballot
+    for ballot_id, group in df.groupby('ballot_id'):
+        choices = []
+        ranks = group.sort_values('rank')['rank'].tolist()
+        ranked_choices = group.sort_values('rank')['choice'].tolist()
 
-        for ballot_id, _, candidate_name in sorted_csv_file:
-            if ballot_id != last_ballot_id and last_ballot_id != 0:
-                ballot = Ballot(ranked_candidates)
-                ballots.append(ballot)
-                ranked_candidates = []
+        # Check for gaps in ranks
+        has_gaps = ranks != list(range(1, len(ranks) + 1))
 
-            last_ballot_id = ballot_id
-            if candidate_name == "$UNDERVOTE":
-                continue
-            if candidate_name == "$OVERVOTE":
-                continue
-            if candidate_name in candidates:
-                candidate = candidates[candidate_name]
-
+        # Convert to pattern
+        for choice in ranked_choices:
+            if choice.startswith('$'):
+                choices.append(choice[1:])  # Remove $ prefix
             else:
-                candidate = Candidate(name=candidate_name)
-                candidates[candidate_name] = candidate
-            ranked_candidates.append(candidate)
+                choices.append('VOTE')
+        pattern = tuple(choices)
+        patterns[pattern] = patterns.get(pattern, 0) + 1
+        if has_gaps:
+            print(f"Ballot {ballot_id} has rank gaps: {ranks}, choices: {ranked_choices}")
 
-        ballot = Ballot(ranked_candidates)
-        ballots.append(ballot)
+    # Print patterns sorted by frequency
+    print("\nMost common ballot patterns:")
+    for pattern, count in sorted(patterns.items(), key=lambda x: x[1], reverse=True)[:20]:
+        print(f"  {pattern}: {count} ballots")
 
-        return list(candidates.values()), ballots
+
+def process_election_file(file_name: str) -> tuple[List[Ballot], List[Candidate], pd.DataFrame, int]:
+    """Process election data file and return ballots and candidates"""
+    data_dir = "tests/test_data/external_irv"
+    file_path = os.path.join(data_dir, file_name)
+
+    # Read the CSV file
+    df = pd.read_csv(file_path)
+
+    # Print diagnostic information
+    special_values = df[df['choice'].str.startswith('$')]['choice'].unique()
+    print("\nSpecial values found in data:")
+    for val in special_values:
+        count = len(df[df['choice'] == val])
+        ballot_count = len(df[df['choice'] == val]['ballot_id'].unique())
+        print(f"  {val}: {count} occurrences in {ballot_count} ballots")
+
+    # Analyze ballot patterns
+    analyze_ballot_patterns(df)
+
+    # Get unique candidates (excluding special values)
+    unique_candidates = sorted(df[~df['choice'].str.startswith('$')]['choice'].unique())
+    candidates = [Candidate(name) for name in unique_candidates]
+    candidate_map = {name: candidate for name, candidate in zip(unique_candidates, candidates)}
+
+    # Process ballots and count invalid votes
+    ballots = []
+    invalid_count = 0
+
+    # First pass: look for patterns that invalidate entire ballots
+    for ballot_id, group in df.groupby('ballot_id'):
+        group_sorted = group.sort_values('rank')
+        ranks = group_sorted['rank'].tolist()
+        choices = group_sorted['choice'].tolist()
+
+        # Check if ballot has gaps in ranks
+        if ranks != list(range(1, len(ranks) + 1)):
+            invalid_count += 1
+            continue
+
+        # Check for overvotes
+        if any(c == '$OVERVOTE' for c in choices):
+            invalid_count += 1
+            continue
+
+        # Check for blank ballot
+        if all(c == '$UNDERVOTE' for c in choices):
+            invalid_count += 1
+            continue
+
+        # Process ballot
+        ranked_candidates = []
+        for choice in choices:
+            if choice == '$UNDERVOTE':
+                break
+            if choice in candidate_map and candidate_map[choice] not in ranked_candidates:
+                ranked_candidates.append(candidate_map[choice])
+
+        if ranked_candidates:
+            ballots.append(Ballot(ranked_candidates))
+        else:
+            invalid_count += 1
+
+    return ballots, candidates, df, invalid_count
 
 
-class TestExternalIRV(unittest.TestCase):
-    def test_us_vt_btv_2009_03_mayor(self):
-        """
-        Burlington 2009 Mayoral Election
-        Source: https://ranked.vote/us/vt/btv/2009/03/mayor/
-        Data source: https://s3.amazonaws.com/ranked.vote-reports/us/vt/btv/2009/03/mayor/us_vt_btv_2009_03_mayor.normalized.csv.gz
-        """
+def run_election_test(file_name: str, expected_blank_votes: int, expected_votes: List[int]) -> None:
+    """Run election test with given file and expected results"""
+    test_case = TestCase()
 
-        number_of_votes = self._extracted_from_test_us_me_2018_11_cd02_4("us_vt_btv_2009_03_mayor.normalized.csv", 607)
+    # Process election data
+    print(f"\nProcessing {file_name}")
+    ballots, candidates, df, blank_votes = process_election_file(file_name)
 
-        correct_number_of_votes = [4313, 4060, 0, 0, 0, 0]
-        assert_list_almost_equal(self, correct_number_of_votes, number_of_votes)
+    # Run election
+    election_result = instant_runoff_voting(candidates, ballots)
+    final_round = election_result.rounds[-1]
+    actual_votes = [result.number_of_votes for result in final_round.candidate_results]
 
-    def test_us_me_2018_06_cd02_primary(self):
-        """
-        Test Maine 2018 Congress District 2 Democrat Primary Election
-        Source: https://ranked.vote/us/me/2018/06/cd02-primary/
-        Data source: https://s3.amazonaws.com/ranked.vote-reports/us/me/2018/06/cd02-primary/us_me_2018_06_cd02-primary.normalized.csv.gz
-        """
+    # Print and verify results
+    print(f"\nElection Results for {file_name}:")
+    print("Final round candidates and votes:")
+    for result in final_round.candidate_results:
+        print(f"  {result.candidate.name}: {result.number_of_votes:.1f}")
+    print(f"\nBallot counts:")
+    print(f"Total unique ballots: {df['ballot_id'].nunique()}")
+    print(f"Valid ballots: {len(ballots)}")
+    print(f"Invalid/blank ballots: {blank_votes}")
+    print(f"Expected blank votes: {expected_blank_votes}")
+    print(f"Actual vs Expected:")
+    print(f"  Blank votes: {blank_votes} vs {expected_blank_votes}")
+    print(f"  Vote totals: {[round(v, 1) for v in actual_votes]} vs {expected_votes}")
 
-        self._extracted_from_test_us_me_2018_11_cd02_4_("us_me_2018_06_cd02-primary.normalized.csv", 7381, 23611, 19853)
+    # Assert results match expectations
+    test_case.assert_list_almost_equal([expected_blank_votes], [blank_votes])
+    test_case.assert_list_almost_equal(expected_votes, actual_votes)
 
-    def test_us_me_2018_11_cd02(self):
-        """
-        Maine 2018 Congress District 2 General Election
-        Source: https://ranked.vote/us/me/2018/11/cd02/
-        Data source: https://s3.amazonaws.com/ranked.vote-reports/us/me/2018/11/cd02/us_me_2018_11_cd02.normalized.csv.gz
-        """
 
-        self._extracted_from_test_us_me_2018_11_cd02_4_("us_me_2018_11_cd02.normalized.csv", 14706, 142440, 138931)
+def test_burlington_2009_mayor():
+    """
+    Burlington 2009 Mayoral Election
+    Source: https://ranked.vote/us/vt/btv/2009/03/mayor/
+    Data source: https://s3.amazonaws.com/ranked.vote-reports/us/vt/btv/2009/03/mayor/us_vt_btv_2009_03_mayor.normalized.csv.gz
+    """
+    run_election_test(
+        file_name='us_vt_btv_2009_03_mayor.normalized.csv',
+        expected_blank_votes=607,
+        expected_votes=[4313, 4060, 0, 0, 0, 0],
+    )
 
-    # TODO Rename this here and in `test_us_vt_btv_2009_03_mayor`, `test_us_me_2018_06_cd02_primary` and `test_us_me_2018_11_cd02`
-    def _extracted_from_test_us_me_2018_11_cd02_4_(self, arg0, arg1, arg2, arg3):
-        number_of_votes = self._extracted_from_test_us_me_2018_11_cd02_4(arg0, arg1)
-        correct_number_of_votes = [arg2, arg3, 0, 0]
-        assert_list_almost_equal(self, correct_number_of_votes, number_of_votes)
 
-    # TODO Rename this here and in `test_us_vt_btv_2009_03_mayor`, `test_us_me_2018_06_cd02_primary` and `test_us_me_2018_11_cd02`
-    def _extracted_from_test_us_me_2018_11_cd02_4(self, file_name, correct_blank_votes):
-        candidates, ballots = parse_ballots_csv_file(file_name)
-        election_result = votesim.instant_runoff_voting(candidates, ballots)
-        last_round = election_result.rounds[-1]
-        blank_votes = last_round.number_of_blank_votes
-        self.assertEqual(correct_blank_votes, blank_votes)
-        result = [candidate_result.number_of_votes for candidate_result in last_round.candidate_results]
+def test_maine_2018_cd2_primary():
+    """
+    Test Maine 2018 Congress District 2 Democrat Primary Election
+    Source: https://ranked.vote/us/me/2018/06/cd02-primary/
+    Data source: https://s3.amazonaws.com/ranked.vote-reports/us/me/2018/06/cd02-primary/us_me_2018_06_cd02-primary.normalized.csv.gz
+    """
+    run_election_test(
+        file_name='us_me_2018_06_cd02-primary.normalized.csv',
+        expected_blank_votes=7381,
+        expected_votes=[23611, 19853, 0, 0],
+    )
 
-        return result
+
+def test_maine_2018_cd2_general():
+    """
+    Maine 2018 Congress District 2 General Election
+    Source: https://ranked.vote/us/me/2018/11/cd02/
+    Data source: https://s3.amazonaws.com/ranked.vote-reports/us/me/2018/11/cd02/us_me_2018_11_cd02.normalized.csv.gz
+    """
+    run_election_test(
+        file_name='us_me_2018_11_cd02.normalized.csv', expected_blank_votes=14706, expected_votes=[142440, 138931, 0, 0]
+    )

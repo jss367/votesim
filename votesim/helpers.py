@@ -2,13 +2,14 @@
 Helper classes used by multiple_seat_ranking_methods.py
 
 """
-from votesim.models import Candidate, Ballot
 
-import random
 import functools
+import random
 from typing import Dict, List, NamedTuple
+
 from tabulate import tabulate
 
+from votesim.models import Ballot, Candidate
 
 CONSIDERED_EQUAL_MARGIN = 0.001
 
