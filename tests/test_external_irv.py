@@ -89,13 +89,11 @@ class TestExternalIRV(unittest.TestCase):
         assert_list_almost_equal(self, correct_number_of_votes, number_of_votes)
 
     # TODO Rename this here and in `test_us_vt_btv_2009_03_mayor`, `test_us_me_2018_06_cd02_primary` and `test_us_me_2018_11_cd02`
-    def _extracted_from_test_us_me_2018_11_cd02_4(self, arg0, arg1):
-        file_name = arg0
+    def _extracted_from_test_us_me_2018_11_cd02_4(self, file_name, correct_blank_votes):
         candidates, ballots = parse_ballots_csv_file(file_name)
         election_result = votesim.instant_runoff_voting(candidates, ballots)
         last_round = election_result.rounds[-1]
         blank_votes = last_round.number_of_blank_votes
-        correct_blank_votes = arg1
         self.assertEqual(correct_blank_votes, blank_votes)
         result = [candidate_result.number_of_votes for candidate_result in last_round.candidate_results]
 
