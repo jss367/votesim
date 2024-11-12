@@ -1,17 +1,36 @@
 from typing import Dict, List, Set, Tuple
 
-from votesim.approval_methods import ApprovalBallot
 from votesim.helpers import CandidateResult, CandidateStatus, ElectionResults, RoundResult
-from votesim.models import Ballot, Candidate
+from votesim.models import Candidate
+
+
+class SmithApprovalBallot:
+    """A ballot for Smith-Approval voting that contains both ranked preferences and approval choices."""
+
+    def __init__(self, ranked_candidates: List[Candidate], approved_candidates: List[Candidate]):
+        self.ranked_candidates = tuple(ranked_candidates)
+        self.approved_candidates = tuple(approved_candidates)
+
+        if len(set(ranked_candidates)) != len(ranked_candidates):
+            raise ValueError("Duplicate candidates in ranked list")
+        if len(set(approved_candidates)) != len(approved_candidates):
+            raise ValueError("Duplicate candidates in approval list")
+
+        approved_set = set(approved_candidates)
+        ranked_set = set(ranked_candidates)
+        if not approved_set.issubset(ranked_set):
+            raise ValueError("All approved candidates must also be ranked")
+
+    def __repr__(self) -> str:
+        ranked = ", ".join(str(c) for c in self.ranked_candidates)
+        approved = ", ".join(str(c) for c in self.approved_candidates)
+        return f"Smith-Approval ballot: [Ranked: {ranked}] [Approved: {approved}]"
 
 
 def get_pairwise_victories(
-    candidates: List[Candidate], ballots: List[Ballot]
+    candidates: List[Candidate], ballots: List[SmithApprovalBallot]
 ) -> Dict[Tuple[Candidate, Candidate], int]:
-    """
-    Compute pairwise victories between all candidates.
-    Returns a dictionary mapping (winner, loser) pairs to victory margin.
-    """
+    """Compute pairwise victories between all candidates."""
     victories = {}
 
     for i, cand1 in enumerate(candidates):
@@ -36,84 +55,102 @@ def get_pairwise_victories(
     return victories
 
 
+def beats(cand1: Candidate, cand2: Candidate, victories: Dict[Tuple[Candidate, Candidate], int]) -> bool:
+    """Check if candidate 1 strictly beats candidate 2."""
+    return (cand1, cand2) in victories and (
+        (cand2, cand1) not in victories or victories[(cand1, cand2)] > victories[(cand2, cand1)]
+    )
+
+
 def get_smith_set(candidates: List[Candidate], victories: Dict[Tuple[Candidate, Candidate], int]) -> Set[Candidate]:
-    """
-    Find the Smith set - smallest set of candidates that beats all others pairwise.
-    """
-    smith_set = set(candidates)
-    changed = True
+    """Find the Smith set - smallest set of candidates that beats all others pairwise."""
 
-    while changed:
-        changed = False
-        for cand in candidates:
-            if cand not in smith_set:
-                continue
+    def dominates(cand1: Candidate, cand2: Candidate) -> bool:
+        return beats(cand1, cand2, victories)
 
-            # Check if this candidate loses to any candidate outside smith set
-            loses_to_non_smith = False
-            for other in candidates:
-                if other == cand or other in smith_set:
-                    continue
+    current_set = set(candidates)
 
-                # Check if other candidate beats current candidate
-                if (other, cand) in victories and (cand, other) not in victories:
-                    loses_to_non_smith = True
-                    break
+    while True:
+        can_remove = set()
 
-            if loses_to_non_smith:
-                smith_set.remove(cand)
-                changed = True
+        for cand in current_set:
+            for other in current_set:
+                if other != cand and dominates(other, cand):
+                    dominated_by_cand = {c for c in current_set if dominates(cand, c)}
+                    dominates_cand = {c for c in current_set if dominates(c, cand)}
+                    if not (dominated_by_cand - dominates_cand):
+                        can_remove.add(cand)
+                        break
 
-    return smith_set
+        if not can_remove:
+            break
+
+        weakest = min(can_remove, key=lambda c: sum(1 for x in current_set if dominates(c, x)))
+        current_set.remove(weakest)
+
+    return current_set
 
 
-def get_approval_scores(candidates: List[Candidate], approval_ballots: List[ApprovalBallot]) -> Dict[Candidate, int]:
-    """
-    Count approval votes for each candidate.
-    """
+def get_approval_scores(candidates: List[Candidate], ballots: List[SmithApprovalBallot]) -> Dict[Candidate, int]:
+    """Count approval votes for each candidate."""
     scores = {candidate: 0 for candidate in candidates}
-    for ballot in approval_ballots:
-        for candidate in ballot.candidates:
+    for ballot in ballots:
+        for candidate in ballot.approved_candidates:
             scores[candidate] += 1
     return scores
 
 
-def smith_approval(
-    candidates: List[Candidate], ranked_ballots: List[Ballot], approval_ballots: List[ApprovalBallot]
-) -> ElectionResults:
+def smith_approval(candidates: List[Candidate], ballots: List[SmithApprovalBallot]) -> ElectionResults:
     """
-    Implementation of Smith-Approval method:
-    1. Use ranked ballots to find Smith set
-    2. Among Smith set, select candidate with most approval votes
+    Run a Smith-Approval election.
 
     Args:
-        candidates: List of candidates
-        ranked_ballots: List of ranked choice ballots
-        approval_ballots: List of approval vote ballots
+        candidates: List of all candidates
+        ballots: List of SmithApprovalBallot objects containing both ranked and approval choices
 
     Returns:
-        ElectionResults object with winner
+        ElectionResults object with winner(s)
     """
-    # Get pairwise victory information
-    victories = get_pairwise_victories(candidates, ranked_ballots)
+    print("\nComputing pairwise victories...")
+    victories = get_pairwise_victories(candidates, ballots)
+    for (cand1, cand2), margin in victories.items():
+        print(f"{cand1} beats {cand2} by {margin} votes")
 
-    # Find Smith set
+    print("\nFinding Smith set...")
     smith_set = get_smith_set(candidates, victories)
+    print("Smith set:", ", ".join(str(c) for c in smith_set))
 
-    # Get approval scores for Smith set candidates
-    approval_scores = get_approval_scores(candidates, approval_ballots)
+    # If Smith set has only one candidate, they win automatically
+    if len(smith_set) == 1:
+        winner = smith_set.pop()
+        print(f"\nSingle candidate in Smith set wins automatically: {winner}")
+        approval_scores = {c: 0 for c in candidates}  # Just to maintain result format
+    else:
+        print("\nMultiple candidates in Smith set, counting approval votes...")
+        approval_scores = get_approval_scores(candidates, ballots)
+        print("Approval scores for Smith set:")
+        for candidate in smith_set:
+            print(f"{candidate}: {approval_scores[candidate]} approvals")
 
-    # Find winner from Smith set with highest approval
-    winner = max(smith_set, key=lambda c: approval_scores[c])
+        # Find winner from Smith set with highest approval
+        winner = max(smith_set, key=lambda c: approval_scores[c])
+        print(f"\nWinner from Smith set (highest approval): {winner}")
 
     # Create election results
     results = ElectionResults()
+
+    # If we didn't count approvals, count them now just for the final results display
+    if all(score == 0 for score in approval_scores.values()):
+        approval_scores = get_approval_scores(candidates, ballots)
 
     # Create candidate results
     candidate_results = []
     for candidate in candidates:
         status = CandidateStatus.Elected if candidate == winner else CandidateStatus.Rejected
-        result = CandidateResult(candidate=candidate, number_of_votes=approval_scores[candidate], status=status)
+        in_smith = "In Smith set" if candidate in smith_set | {winner} else "Not in Smith set"
+        result = CandidateResult(
+            candidate=f"{candidate} ({in_smith})", number_of_votes=approval_scores[candidate], status=status
+        )
         candidate_results.append(result)
 
     # Sort by approval votes
