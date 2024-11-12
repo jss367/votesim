@@ -36,33 +36,53 @@ def get_pairwise_victories(
     return victories
 
 
+def beats_or_ties(cand1: Candidate, cand2: Candidate, victories: Dict[Tuple[Candidate, Candidate], int]) -> bool:
+    """Helper function to check if candidate 1 beats or ties candidate 2."""
+    # If cand1 beats cand2 with a positive margin, or neither beats the other (tie)
+    return (
+        ((cand1, cand2) in victories and (cand2, cand1) not in victories)
+        or ((cand1, cand2) in victories and (cand2, cand1) in victories)
+        or ((cand1, cand2) not in victories and (cand2, cand1) not in victories)
+    )
+
+
 def get_smith_set(candidates: List[Candidate], victories: Dict[Tuple[Candidate, Candidate], int]) -> Set[Candidate]:
     """
     Find the Smith set - smallest set of candidates that beats all others pairwise.
+    A candidate is in the Smith set if they beat or tie all candidates outside the set.
     """
+    # Start with all candidates
     smith_set = set(candidates)
-    changed = True
 
+    # Keep removing candidates until we can't anymore
+    changed = True
     while changed:
         changed = False
-        for cand in candidates:
-            if cand not in smith_set:
-                continue
-
-            # Check if this candidate loses to any candidate outside smith set
-            loses_to_non_smith = False
+        for cand in list(smith_set):  # Create list to avoid modifying set during iteration
+            # Check if this candidate should be in Smith set
+            # They must beat or tie ALL candidates outside current Smith set
+            beats_or_ties_all_outside = True
             for other in candidates:
                 if other == cand or other in smith_set:
                     continue
 
-                # Check if other candidate beats current candidate
-                if (other, cand) in victories and (cand, other) not in victories:
-                    loses_to_non_smith = True
+                # If they don't beat or tie this outside candidate, they shouldn't be in Smith set
+                if not beats_or_ties(cand, other, victories):
+                    beats_or_ties_all_outside = False
                     break
 
-            if loses_to_non_smith:
+            # If they don't beat or tie all outside candidates, remove them
+            if not beats_or_ties_all_outside:
                 smith_set.remove(cand)
                 changed = True
+
+    # Handle special case: if smith_set is empty, return candidate(s) with most pairwise victories
+    if not smith_set:
+        win_counts = {c: 0 for c in candidates}
+        for winner, _ in victories:
+            win_counts[winner] += 1
+        max_wins = max(win_counts.values())
+        smith_set = {c for c in candidates if win_counts[c] == max_wins}
 
     return smith_set
 
