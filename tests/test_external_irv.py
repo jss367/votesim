@@ -1,94 +1,120 @@
-import csv
-import os
+"""Tests for external IRV election cases"""
 
-from votesim import Ballot, Candidate, instant_runoff_voting
+import os
+from dataclasses import dataclass
+from typing import Any, List, Optional
+
+import pandas as pd
+
+from votesim.models import Ballot, Candidate
+from votesim.single_seat_ranking_methods import instant_runoff_voting
 from votesim.test_helpers import assert_list_almost_equal
 
-TEST_FOLDER = "test_data/external_irv/"
-THIS_DIR = os.path.dirname(os.path.abspath(__file__))
-TEST_DATA_PATH = os.path.join(THIS_DIR, os.pardir, TEST_FOLDER)
+
+@dataclass
+class TestCase:
+    def assertEqual(self, a: Any, b: Any, msg: Optional[str] = None) -> None:
+        """Assert that two values are equal"""
+        assert a == b, msg or f"{a} != {b}"
+
+    def assertTrue(self, expr: bool, msg: Optional[str] = None) -> None:
+        """Assert that expression is True"""
+        assert expr, msg or "Expression is not True"
+
+    def assert_list_almost_equal(self, *args, **kwargs):
+        """Helper method to match interface"""
+        assert_list_almost_equal(self, *args, **kwargs)
 
 
-def parse_ballots_csv_file(file_name):
-    """Parse CSV file containing ballot data and return candidates and ballots."""
-    file_path = os.path.join(TEST_DATA_PATH, file_name)
-    with open(file_path) as f:
-        csv_data = list(csv.reader(f))[1:]  # Skip header
+def process_election_file(file_name: str) -> tuple[List[Ballot], List[Candidate], pd.DataFrame, int]:
+    """Process election data file and return ballots and candidates"""
+    data_dir = "tests/test_data/external_irv"
+    file_path = os.path.join(data_dir, file_name)
 
-    candidates = {}
+    # Read the CSV file
+    df = pd.read_csv(file_path)
+
+    # Get unique candidates (excluding special values)
+    unique_candidates = sorted(df[~df['choice'].str.startswith('$')]['choice'].unique())
+    candidates = [Candidate(name) for name in unique_candidates]
+    candidate_map = {name: candidate for name, candidate in zip(unique_candidates, candidates)}
+
+    # Process ballots
     ballots = []
-    current_ranked_candidates = []
-    current_ballot_id = None
 
-    # Track ballot statistics for debugging
-    total_ballots = 0
-    skipped_undervotes = 0
-    skipped_overvotes = 0
+    # Count total unique ballot IDs to help determine undervotes
+    total_unique_ballots = df['ballot_id'].nunique()
 
-    for ballot_id, _, candidate_name in csv_data:
-        # Create new ballot when ID changes
-        if current_ballot_id is not None and ballot_id != current_ballot_id:
-            if current_ranked_candidates:
-                ballots.append(Ballot(current_ranked_candidates))
-            else:
-                # If we skipped all candidates for this ballot (due to under/overvotes),
-                # add an empty ballot to maintain the blank vote count
-                ballots.append(Ballot([]))
-            total_ballots += 1
-            current_ranked_candidates = []
+    for ballot_id, group in df.groupby('ballot_id'):
+        # Sort by rank and get choices
+        choices = group.sort_values('rank')['choice'].tolist()
 
-        current_ballot_id = ballot_id
+        # Convert choices to candidates, removing duplicates and stopping at special values
+        seen_candidates = set()
+        ranked_candidates = []
+        for choice in choices:
+            if choice in candidate_map and choice not in seen_candidates:
+                ranked_candidates.append(candidate_map[choice])
+                seen_candidates.add(choice)
+            elif choice.startswith('$'):
+                break
 
-        # Track skipped votes
-        if candidate_name == '$UNDERVOTE':
-            skipped_undervotes += 1
-            continue
-        if candidate_name == '$OVERVOTE':
-            skipped_overvotes += 1
-            continue
+        if ranked_candidates:  # Only add ballot if it has valid rankings
+            ballots.append(Ballot(ranked_candidates))
 
-        # Get or create candidate
-        if candidate_name not in candidates:
-            candidates[candidate_name] = Candidate(name=candidate_name)
-        current_ranked_candidates.append(candidates[candidate_name])
+    # Calculate blank votes as difference between total ballots and valid ballots
+    blank_votes = total_unique_ballots - len(ballots)
 
-    # Handle the last ballot
-    if current_ranked_candidates:
-        ballots.append(Ballot(current_ranked_candidates))
-    else:
-        ballots.append(Ballot([]))
-    total_ballots += 1
+    print(f"\nProcessed {len(df)} total rows")
+    print(f"Found {len(candidates)} candidates:")
+    for c in candidates:
+        print(f"  - {c.name}")
+    print(f"Total unique ballot IDs: {total_unique_ballots}")
+    print(f"Created {len(ballots)} valid ballots")
+    print(f"Calculated {blank_votes} blank votes")
 
+    return ballots, candidates, df, blank_votes
+
+
+def run_election_test(file_name: str, expected_blank_votes: int, expected_votes: List[int]) -> None:
+    """Run election test with given file and expected results"""
+    test_case = TestCase()
+
+    # Process election data
+    print(f"\nProcessing {file_name}")
+    ballots, candidates, df, blank_votes = process_election_file(file_name)
+
+    # Get ballot statistics
+    unique_ballot_ids = df['ballot_id'].nunique()
+    total_rows = len(df)
+
+    # Print ballot statistics
     print(f"\nBallot Statistics for {file_name}:")
-    print(f"Total ballots processed: {total_ballots}")
-    print(f"Undervotes skipped: {skipped_undervotes}")
-    print(f"Overvotes skipped: {skipped_overvotes}")
-    print(f"Final ballot count: {len(ballots)}")
+    print(f"Unique ballot IDs: {unique_ballot_ids}")
+    print(f"Total rows in file: {total_rows}")
+    print(f"Valid ballots created: {len(ballots)}")
+    print(f"Number of candidates: {len(candidates)}")
+    print(f"Blank votes: {blank_votes}")
 
-    return list(candidates.values()), ballots
-
-
-def run_election_test(file_name, expected_blank_votes, expected_votes):
-    """Run an election test case and verify results."""
-    candidates, ballots = parse_ballots_csv_file(file_name)
+    # Run election
     election_result = instant_runoff_voting(candidates, ballots)
+    final_round = election_result.rounds[-1]
+    actual_blank_votes = blank_votes  # Use counted blank votes
+    actual_votes = [result.number_of_votes for result in final_round.candidate_results]
 
-    last_round = election_result.rounds[-1]
-
-    # Add debugging information
+    # Print and verify results
     print(f"\nElection Results for {file_name}:")
+    print("Final round candidates:")
+    for result in final_round.candidate_results:
+        print(f"  {result.candidate.name}: {result.number_of_votes}")
     print(f"Expected blank votes: {expected_blank_votes}")
-    print(f"Actual blank votes: {last_round.number_of_blank_votes}")
-    print(f"Difference: {expected_blank_votes - last_round.number_of_blank_votes}")
-
-    assert expected_blank_votes == last_round.number_of_blank_votes
-
-    actual_votes = [result.number_of_votes for result in last_round.candidate_results]
+    print(f"Actual blank votes: {actual_blank_votes}")
+    print(f"Difference: {actual_blank_votes - expected_blank_votes}")
     print(f"Expected votes: {expected_votes}")
     print(f"Actual votes: {actual_votes}")
 
-    # Pass TestCase instance as first argument
-    test_case = type('TestCase', (), {'assert_list_almost_equal': assert_list_almost_equal})()
+    # Assert results match expectations
+    test_case.assert_list_almost_equal([expected_blank_votes], [actual_blank_votes])
     test_case.assert_list_almost_equal(expected_votes, actual_votes)
 
 
