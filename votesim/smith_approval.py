@@ -113,7 +113,6 @@ def smith_approval(candidates: List[Candidate], ballots: List[SmithApprovalBallo
     """
     print("\nComputing pairwise victories...")
     victories = get_pairwise_victories(candidates, ballots)
-    # Print pairwise victories
     for (cand1, cand2), margin in victories.items():
         print(f"{cand1} beats {cand2} by {margin} votes")
 
@@ -121,25 +120,34 @@ def smith_approval(candidates: List[Candidate], ballots: List[SmithApprovalBallo
     smith_set = get_smith_set(candidates, victories)
     print("Smith set:", ", ".join(str(c) for c in smith_set))
 
-    print("\nCounting approval votes...")
-    approval_scores = get_approval_scores(candidates, ballots)
-    # Print approval scores for Smith set members
-    print("Approval scores for Smith set:")
-    for candidate in smith_set:
-        print(f"{candidate}: {approval_scores[candidate]} approvals")
+    # If Smith set has only one candidate, they win automatically
+    if len(smith_set) == 1:
+        winner = smith_set.pop()
+        print(f"\nSingle candidate in Smith set wins automatically: {winner}")
+        approval_scores = {c: 0 for c in candidates}  # Just to maintain result format
+    else:
+        print("\nMultiple candidates in Smith set, counting approval votes...")
+        approval_scores = get_approval_scores(candidates, ballots)
+        print("Approval scores for Smith set:")
+        for candidate in smith_set:
+            print(f"{candidate}: {approval_scores[candidate]} approvals")
 
-    # Find winner from Smith set with highest approval
-    winner = max(smith_set, key=lambda c: approval_scores[c])
-    print(f"\nWinner from Smith set (highest approval): {winner}")
+        # Find winner from Smith set with highest approval
+        winner = max(smith_set, key=lambda c: approval_scores[c])
+        print(f"\nWinner from Smith set (highest approval): {winner}")
 
     # Create election results
     results = ElectionResults()
+
+    # If we didn't count approvals, count them now just for the final results display
+    if all(score == 0 for score in approval_scores.values()):
+        approval_scores = get_approval_scores(candidates, ballots)
 
     # Create candidate results
     candidate_results = []
     for candidate in candidates:
         status = CandidateStatus.Elected if candidate == winner else CandidateStatus.Rejected
-        in_smith = "In Smith set" if candidate in smith_set else "Not in Smith set"
+        in_smith = "In Smith set" if candidate in smith_set | {winner} else "Not in Smith set"
         result = CandidateResult(
             candidate=f"{candidate} ({in_smith})", number_of_votes=approval_scores[candidate], status=status
         )
