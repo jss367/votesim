@@ -4,9 +4,9 @@ from votesim.helpers import print_ballots
 from votesim.models import Ballot, Candidate
 from votesim.multiple_seat_ranking_methods import preferential_block_voting, single_transferable_vote
 from votesim.single_seat_ranking_methods import instant_runoff_voting
-from votesim.smith_approval import smith_approval
+from votesim.smith_approval import SmithApprovalBallot, smith_approval
 
-__version__ = "2.2.0"
+__version__ = "2.2.1"
 
 __all__ = [
     "Candidate",
@@ -19,4 +19,5 @@ __all__ = [
     "ApprovalElection",
     "print_ballots",
     "smith_approval",
+    "SmithApprovalBallot",
 ]
