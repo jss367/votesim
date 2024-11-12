@@ -58,7 +58,7 @@ For more info:
 With pip package manager:
 
 ```bash
-pip install votesim
+pip install -e .
 ```
 
 ## Usage
