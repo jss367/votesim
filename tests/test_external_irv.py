@@ -26,6 +26,28 @@ class TestCase:
         assert_list_almost_equal(self, *args, **kwargs)
 
 
+def analyze_ballot_patterns(df: pd.DataFrame) -> None:
+    """Analyze patterns in the ballot data to understand invalidation rules"""
+    print("\nBallot Pattern Analysis:")
+
+    # Print statistics for each ballot_id's ranking pattern
+    pattern_counts = {}
+    for ballot_id, group in df.groupby('ballot_id'):
+        choices = group.sort_values('rank')['choice'].tolist()
+        pattern = []
+        for choice in choices:
+            if choice.startswith('$'):
+                pattern.append(choice[1:])  # Remove $ for readability
+            else:
+                pattern.append('VOTE')
+        pattern = tuple(pattern)
+        pattern_counts[pattern] = pattern_counts.get(pattern, 0) + 1
+
+    print("\nMost common ballot patterns:")
+    for pattern, count in sorted(pattern_counts.items(), key=lambda x: x[1], reverse=True)[:10]:
+        print(f"  {pattern}: {count} ballots")
+
+
 def process_election_file(file_name: str) -> tuple[List[Ballot], List[Candidate], pd.DataFrame, int]:
     """Process election data file and return ballots and candidates"""
     data_dir = "tests/test_data/external_irv"
@@ -34,12 +56,15 @@ def process_election_file(file_name: str) -> tuple[List[Ballot], List[Candidate]
     # Read the CSV file
     df = pd.read_csv(file_path)
 
-    # Print diagnostic information about special values
+    # Print diagnostic information
     special_values = df[df['choice'].str.startswith('$')]['choice'].unique()
     print("\nSpecial values found in data:")
     for val in special_values:
         count = len(df[df['choice'] == val])
         print(f"  {val}: {count} occurrences")
+
+    # Analyze ballot patterns
+    analyze_ballot_patterns(df)
 
     # Get unique candidates (excluding special values)
     unique_candidates = sorted(df[~df['choice'].str.startswith('$')]['choice'].unique())
@@ -48,45 +73,69 @@ def process_election_file(file_name: str) -> tuple[List[Ballot], List[Candidate]
 
     # Process ballots and count different types of invalid votes
     ballots = []
-    blank_votes = 0
-    invalid_votes = 0
-    undervotes = 0
-    overvotes = 0
+    total_invalid = 0
+    skipped_ballots = set()
+    expected_ranks = list(range(1, df['rank'].max() + 1))
 
+    # First pass: identify invalid ballots
     for ballot_id, group in df.groupby('ballot_id'):
-        choices = group.sort_values('rank')['choice'].tolist()
+        group_sorted = group.sort_values('rank')
+        choices = group_sorted['choice'].tolist()
+        ranks = group_sorted['rank'].tolist()
 
-        # Count different types of invalid ballots
+        # Check if ballot has overvote
         if any(c == '$OVERVOTE' for c in choices):
-            overvotes += 1
+            skipped_ballots.add(ballot_id)
+            total_invalid += 1
             continue
 
+        # Check if ballot is all undervotes
         if all(c == '$UNDERVOTE' for c in choices):
-            undervotes += 1
+            skipped_ballots.add(ballot_id)
+            total_invalid += 1
             continue
 
-        if any(c.startswith('$') and c != '$UNDERVOTE' for c in choices):
-            invalid_votes += 1
+        # Check if ranks are continuous (no gaps)
+        if ranks != expected_ranks[: len(ranks)]:
+            skipped_ballots.add(ballot_id)
+            total_invalid += 1
             continue
 
-        # Convert choices to candidates, removing duplicates and undervotes
-        seen_candidates = set()
-        ranked_candidates = []
+        # Check for undervotes in middle of valid choices
+        valid_found = False
+        undervote_found = False
         for choice in choices:
-            if choice == '$UNDERVOTE':
-                continue
-            if choice in candidate_map and choice not in seen_candidates:
-                ranked_candidates.append(candidate_map[choice])
-                seen_candidates.add(choice)
+            if not choice.startswith('$'):
+                valid_found = True
+                if undervote_found:
+                    skipped_ballots.add(ballot_id)
+                    total_invalid += 1
+                    break
+            elif choice == '$UNDERVOTE':
+                undervote_found = True
+                if valid_found:
+                    skipped_ballots.add(ballot_id)
+                    total_invalid += 1
+                    break
 
-        if not ranked_candidates:
-            undervotes += 1
+    # Second pass: create valid ballots
+    for ballot_id, group in df.groupby('ballot_id'):
+        if ballot_id in skipped_ballots:
             continue
 
-        ballots.append(Ballot(ranked_candidates))
+        ranked_candidates = []
+        seen_candidates = set()
 
-    # Total blank votes is sum of all invalid vote types
-    total_blanks = undervotes + overvotes + invalid_votes
+        for choice in group.sort_values('rank')['choice']:
+            if not choice.startswith('$'):
+                if choice in candidate_map and choice not in seen_candidates:
+                    ranked_candidates.append(candidate_map[choice])
+                    seen_candidates.add(choice)
+
+        if ranked_candidates:
+            ballots.append(Ballot(ranked_candidates))
+        else:
+            total_invalid += 1
 
     print(f"\nProcessed {len(df)} total rows")
     print(f"Found {len(candidates)} candidates:")
@@ -94,13 +143,9 @@ def process_election_file(file_name: str) -> tuple[List[Ballot], List[Candidate]
         print(f"  - {c.name}")
     print(f"Total unique ballot IDs: {df['ballot_id'].nunique()}")
     print(f"Created {len(ballots)} valid ballots")
-    print(f"Vote counting summary:")
-    print(f"  Undervotes: {undervotes}")
-    print(f"  Overvotes: {overvotes}")
-    print(f"  Other invalid: {invalid_votes}")
-    print(f"  Total blank/invalid: {total_blanks}")
+    print(f"Total invalid/blank votes: {total_invalid}")
 
-    return ballots, candidates, df, total_blanks
+    return ballots, candidates, df, total_invalid
 
 
 def run_election_test(file_name: str, expected_blank_votes: int, expected_votes: List[int]) -> None:
@@ -115,7 +160,7 @@ def run_election_test(file_name: str, expected_blank_votes: int, expected_votes:
     print(f"\nBallot Statistics for {file_name}:")
     print(f"Total unique ballots: {df['ballot_id'].nunique()}")
     print(f"Valid ballots: {len(ballots)}")
-    print(f"Blank votes: {blank_votes}")
+    print(f"Invalid/blank votes: {blank_votes}")
     print(f"Candidates ({len(candidates)}):")
     for c in candidates:
         print(f"  - {c.name}")
