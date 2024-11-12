@@ -6,10 +6,11 @@ Implemented methods:
  - Preferential block voting
 """
 
-from typing import List
-from votesim.helpers import CompareMethodIfEqual, ElectionManager, ElectionResults
-from votesim.models import Candidate, Ballot
 import math
+from typing import List
+
+from votesim.helpers import CompareMethodIfEqual, ElectionManager, ElectionResults
+from votesim.models import Ballot, Candidate
 
 
 def preferential_block_voting(
@@ -72,7 +73,7 @@ def preferential_block_voting(
                 candidates_to_reject.append(candidate)
 
             elif is_last_candidate:
-                # Should be catched by if statement above
+                # Should be caught by if statement above
                 raise RuntimeError("Illegal state")
 
             last_votes = votes_for_candidate
@@ -185,8 +186,8 @@ def single_transferable_vote(
                     candidates_to_reject.append(candidate)
 
             elif is_last_candidate:
-                # Should be catched by if statement above
-                raise RuntimeError("Illigal state")
+                # Should be caught by if statement above
+                raise RuntimeError("Illegal state")
 
             last_votes = votes_for_candidate
             votes_remaining -= votes_for_candidate
