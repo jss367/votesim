@@ -1,9 +1,7 @@
 import csv
 import os
-import unittest
 
-import votesim
-from votesim import Ballot, Candidate
+from votesim import Ballot, Candidate, instant_runoff_voting
 from votesim.test_helpers import assert_list_almost_equal
 
 TEST_FOLDER = "test_data/external_irv/"
@@ -12,89 +10,120 @@ TEST_DATA_PATH = os.path.join(THIS_DIR, os.pardir, TEST_FOLDER)
 
 
 def parse_ballots_csv_file(file_name):
+    """Parse CSV file containing ballot data and return candidates and ballots."""
     file_path = os.path.join(TEST_DATA_PATH, file_name)
     with open(file_path) as f:
-        csv_file_without_header = list(csv.reader(f))[1:]
-        parsed_csv_file = [
-            (ballot_id, rank, candidate_name) for ballot_id, rank, candidate_name in csv_file_without_header
-        ]
-        # sorted_csv_file = sorted(parsed_csv_file, key=itemgetter(0,1))
-        sorted_csv_file = parsed_csv_file
+        csv_data = list(csv.reader(f))[1:]  # Skip header
 
-        candidates = {}
-        ballots = []
-        last_ballot_id = 0
-        ranked_candidates = []
+    candidates = {}
+    ballots = []
+    current_ranked_candidates = []
+    current_ballot_id = None
 
-        for ballot_id, _, candidate_name in sorted_csv_file:
-            if ballot_id != last_ballot_id and last_ballot_id != 0:
-                ballot = Ballot(ranked_candidates)
-                ballots.append(ballot)
-                ranked_candidates = []
+    # Track ballot statistics for debugging
+    total_ballots = 0
+    skipped_undervotes = 0
+    skipped_overvotes = 0
 
-            last_ballot_id = ballot_id
-            if candidate_name == "$UNDERVOTE":
-                continue
-            if candidate_name == "$OVERVOTE":
-                continue
-            if candidate_name in candidates:
-                candidate = candidates[candidate_name]
-
+    for ballot_id, _, candidate_name in csv_data:
+        # Create new ballot when ID changes
+        if current_ballot_id is not None and ballot_id != current_ballot_id:
+            if current_ranked_candidates:
+                ballots.append(Ballot(current_ranked_candidates))
             else:
-                candidate = Candidate(name=candidate_name)
-                candidates[candidate_name] = candidate
-            ranked_candidates.append(candidate)
+                # If we skipped all candidates for this ballot (due to under/overvotes),
+                # add an empty ballot to maintain the blank vote count
+                ballots.append(Ballot([]))
+            total_ballots += 1
+            current_ranked_candidates = []
 
-        ballot = Ballot(ranked_candidates)
-        ballots.append(ballot)
+        current_ballot_id = ballot_id
 
-        return list(candidates.values()), ballots
+        # Track skipped votes
+        if candidate_name == '$UNDERVOTE':
+            skipped_undervotes += 1
+            continue
+        if candidate_name == '$OVERVOTE':
+            skipped_overvotes += 1
+            continue
+
+        # Get or create candidate
+        if candidate_name not in candidates:
+            candidates[candidate_name] = Candidate(name=candidate_name)
+        current_ranked_candidates.append(candidates[candidate_name])
+
+    # Handle the last ballot
+    if current_ranked_candidates:
+        ballots.append(Ballot(current_ranked_candidates))
+    else:
+        ballots.append(Ballot([]))
+    total_ballots += 1
+
+    print(f"\nBallot Statistics for {file_name}:")
+    print(f"Total ballots processed: {total_ballots}")
+    print(f"Undervotes skipped: {skipped_undervotes}")
+    print(f"Overvotes skipped: {skipped_overvotes}")
+    print(f"Final ballot count: {len(ballots)}")
+
+    return list(candidates.values()), ballots
 
 
-class TestExternalIRV(unittest.TestCase):
-    def test_us_vt_btv_2009_03_mayor(self):
-        """
-        Burlington 2009 Mayoral Election
-        Source: https://ranked.vote/us/vt/btv/2009/03/mayor/
-        Data source: https://s3.amazonaws.com/ranked.vote-reports/us/vt/btv/2009/03/mayor/us_vt_btv_2009_03_mayor.normalized.csv.gz
-        """
+def run_election_test(file_name, expected_blank_votes, expected_votes):
+    """Run an election test case and verify results."""
+    candidates, ballots = parse_ballots_csv_file(file_name)
+    election_result = instant_runoff_voting(candidates, ballots)
 
-        number_of_votes = self._extracted_from_test_us_me_2018_11_cd02_4("us_vt_btv_2009_03_mayor.normalized.csv", 607)
+    last_round = election_result.rounds[-1]
 
-        correct_number_of_votes = [4313, 4060, 0, 0, 0, 0]
-        assert_list_almost_equal(self, correct_number_of_votes, number_of_votes)
+    # Add debugging information
+    print(f"\nElection Results for {file_name}:")
+    print(f"Expected blank votes: {expected_blank_votes}")
+    print(f"Actual blank votes: {last_round.number_of_blank_votes}")
+    print(f"Difference: {expected_blank_votes - last_round.number_of_blank_votes}")
 
-    def test_us_me_2018_06_cd02_primary(self):
-        """
-        Test Maine 2018 Congress District 2 Democrat Primary Election
-        Source: https://ranked.vote/us/me/2018/06/cd02-primary/
-        Data source: https://s3.amazonaws.com/ranked.vote-reports/us/me/2018/06/cd02-primary/us_me_2018_06_cd02-primary.normalized.csv.gz
-        """
+    assert expected_blank_votes == last_round.number_of_blank_votes
 
-        self._extracted_from_test_us_me_2018_11_cd02_4_("us_me_2018_06_cd02-primary.normalized.csv", 7381, 23611, 19853)
+    actual_votes = [result.number_of_votes for result in last_round.candidate_results]
+    print(f"Expected votes: {expected_votes}")
+    print(f"Actual votes: {actual_votes}")
 
-    def test_us_me_2018_11_cd02(self):
-        """
-        Maine 2018 Congress District 2 General Election
-        Source: https://ranked.vote/us/me/2018/11/cd02/
-        Data source: https://s3.amazonaws.com/ranked.vote-reports/us/me/2018/11/cd02/us_me_2018_11_cd02.normalized.csv.gz
-        """
+    # Pass TestCase instance as first argument
+    test_case = type('TestCase', (), {'assert_list_almost_equal': assert_list_almost_equal})()
+    test_case.assert_list_almost_equal(expected_votes, actual_votes)
 
-        self._extracted_from_test_us_me_2018_11_cd02_4_("us_me_2018_11_cd02.normalized.csv", 14706, 142440, 138931)
 
-    # TODO Rename this here and in `test_us_vt_btv_2009_03_mayor`, `test_us_me_2018_06_cd02_primary` and `test_us_me_2018_11_cd02`
-    def _extracted_from_test_us_me_2018_11_cd02_4_(self, arg0, arg1, arg2, arg3):
-        number_of_votes = self._extracted_from_test_us_me_2018_11_cd02_4(arg0, arg1)
-        correct_number_of_votes = [arg2, arg3, 0, 0]
-        assert_list_almost_equal(self, correct_number_of_votes, number_of_votes)
+def test_burlington_2009_mayor():
+    """
+    Burlington 2009 Mayoral Election
+    Source: https://ranked.vote/us/vt/btv/2009/03/mayor/
+    Data source: https://s3.amazonaws.com/ranked.vote-reports/us/vt/btv/2009/03/mayor/us_vt_btv_2009_03_mayor.normalized.csv.gz
+    """
+    run_election_test(
+        file_name='us_vt_btv_2009_03_mayor.normalized.csv',
+        expected_blank_votes=607,
+        expected_votes=[4313, 4060, 0, 0, 0, 0],
+    )
 
-    # TODO Rename this here and in `test_us_vt_btv_2009_03_mayor`, `test_us_me_2018_06_cd02_primary` and `test_us_me_2018_11_cd02`
-    def _extracted_from_test_us_me_2018_11_cd02_4(self, file_name, correct_blank_votes):
-        candidates, ballots = parse_ballots_csv_file(file_name)
-        election_result = votesim.instant_runoff_voting(candidates, ballots)
-        last_round = election_result.rounds[-1]
-        blank_votes = last_round.number_of_blank_votes
-        self.assertEqual(correct_blank_votes, blank_votes)
-        result = [candidate_result.number_of_votes for candidate_result in last_round.candidate_results]
 
-        return result
+def test_maine_2018_cd2_primary():
+    """
+    Test Maine 2018 Congress District 2 Democrat Primary Election
+    Source: https://ranked.vote/us/me/2018/06/cd02-primary/
+    Data source: https://s3.amazonaws.com/ranked.vote-reports/us/me/2018/06/cd02-primary/us_me_2018_06_cd02-primary.normalized.csv.gz
+    """
+    run_election_test(
+        file_name='us_me_2018_06_cd02-primary.normalized.csv',
+        expected_blank_votes=7381,
+        expected_votes=[23611, 19853, 0, 0],
+    )
+
+
+def test_maine_2018_cd2_general():
+    """
+    Maine 2018 Congress District 2 General Election
+    Source: https://ranked.vote/us/me/2018/11/cd02/
+    Data source: https://s3.amazonaws.com/ranked.vote-reports/us/me/2018/11/cd02/us_me_2018_11_cd02.normalized.csv.gz
+    """
+    run_election_test(
+        file_name='us_me_2018_11_cd02.normalized.csv', expected_blank_votes=14706, expected_votes=[142440, 138931, 0, 0]
+    )
