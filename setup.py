@@ -14,7 +14,7 @@ def my_test_suite():
 
 setuptools.setup(
     name="votesim",
-    version="2.1.0",
+    version="2.2.0",
     description="VoteSim is a python library for different voting methods",
     license="MIT",
     url="https://github.com/jss367/votesim",
