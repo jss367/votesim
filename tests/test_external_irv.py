@@ -1,10 +1,10 @@
-import unittest
-import os
 import csv
-import votesim
-from votesim import Candidate, Ballot
-from votesim.test_helpers import assert_list_almost_equal
+import os
+import unittest
 
+import votesim
+from votesim import Ballot, Candidate
+from votesim.test_helpers import assert_list_almost_equal
 
 TEST_FOLDER = "test_data/external_irv/"
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
