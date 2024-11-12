@@ -111,12 +111,26 @@ def smith_approval(candidates: List[Candidate], ballots: List[SmithApprovalBallo
     Returns:
         ElectionResults object with winner(s)
     """
+    print("\nComputing pairwise victories...")
     victories = get_pairwise_victories(candidates, ballots)
+    # Print pairwise victories
+    for (cand1, cand2), margin in victories.items():
+        print(f"{cand1} beats {cand2} by {margin} votes")
+
+    print("\nFinding Smith set...")
     smith_set = get_smith_set(candidates, victories)
+    print("Smith set:", ", ".join(str(c) for c in smith_set))
+
+    print("\nCounting approval votes...")
     approval_scores = get_approval_scores(candidates, ballots)
+    # Print approval scores for Smith set members
+    print("Approval scores for Smith set:")
+    for candidate in smith_set:
+        print(f"{candidate}: {approval_scores[candidate]} approvals")
 
     # Find winner from Smith set with highest approval
     winner = max(smith_set, key=lambda c: approval_scores[c])
+    print(f"\nWinner from Smith set (highest approval): {winner}")
 
     # Create election results
     results = ElectionResults()
@@ -125,7 +139,10 @@ def smith_approval(candidates: List[Candidate], ballots: List[SmithApprovalBallo
     candidate_results = []
     for candidate in candidates:
         status = CandidateStatus.Elected if candidate == winner else CandidateStatus.Rejected
-        result = CandidateResult(candidate=candidate, number_of_votes=approval_scores[candidate], status=status)
+        in_smith = "In Smith set" if candidate in smith_set else "Not in Smith set"
+        result = CandidateResult(
+            candidate=f"{candidate} ({in_smith})", number_of_votes=approval_scores[candidate], status=status
+        )
         candidate_results.append(result)
 
     # Sort by approval votes
