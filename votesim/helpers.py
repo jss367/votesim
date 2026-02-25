@@ -1,6 +1,5 @@
 """
 Helper classes used by multiple_seat_ranking_methods.py
-
 """
 
 import functools
@@ -14,8 +13,8 @@ from votesim.models import Ballot, Candidate
 CONSIDERED_EQUAL_MARGIN = 0.001
 
 
-def almost_equal(value1: float, value2: float) -> bool:
-    return abs(value1 - value2) < CONSIDERED_EQUAL_MARGIN
+def almost_equal(value1: float, value2: float, margin: float = CONSIDERED_EQUAL_MARGIN) -> bool:
+    return abs(value1 - value2) < margin
 
 
 def print_ballots(ballots):
@@ -36,9 +35,6 @@ class CandidateResult(NamedTuple):
 
 
 class RoundResult:
-    candidate_results: List[CandidateResult]
-    number_of_blank_votes: float
-
     def __init__(self, candidate_results, number_of_blank_votes):
         self.candidate_results = candidate_results
         self.number_of_blank_votes = number_of_blank_votes
@@ -47,23 +43,23 @@ class RoundResult:
         return "RoundResult: "
 
     def __str__(self):
-        if almost_equal(self.number_of_blank_votes, 0.0):
-            results_with_blank_votes = self.candidate_results
-        else:
-            blank_votes_as_candidate_results = [("Blank votes", self.number_of_blank_votes, CandidateStatus.Rejected)]
-            results_with_blank_votes = self.candidate_results + blank_votes_as_candidate_results
+        # Convert candidate results to list format for tabulate
+        formatted_results = []
+        for result in self.candidate_results:
+            formatted_results.append(
+                [str(result.candidate), result.number_of_votes, result.status]  # Convert candidate to string
+            )
 
-        all_integers = all([float(candidateResult[1]).is_integer() for candidateResult in results_with_blank_votes])
-        if all_integers:
-            float_format = ".0f"
-        else:
-            float_format = ".2f"
+        # Add blank votes if any
+        if not almost_equal(self.number_of_blank_votes, 0.0):
+            formatted_results.append(["Blank votes", self.number_of_blank_votes, "Rejected"])
 
-        pretty_print_string = tabulate(
-            results_with_blank_votes, headers=["Candidate", "Votes", "Status"], floatfmt=float_format
-        )
+        # Determine if all numbers are integers
+        all_integers = all(float(row[1]).is_integer() for row in formatted_results)
 
-        return pretty_print_string
+        float_format = ".0f" if all_integers else ".2f"
+
+        return tabulate(formatted_results, headers=["Candidate", "Votes", "Status"], floatfmt=float_format)
 
 
 class CandidateVoteCount:
